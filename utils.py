@@ -9,6 +9,8 @@ def get_files(directory = os.curdir):
     return files
 
 def get_commit_diff(cm_file_path,file_path):
+    # cm_file_path is the path of the file saved inside the .cm folder.
+    # file_path is the path of the file in the active directory.
     file_diff = []
     with open(cm_file_path, 'r') as hosts0:
         with open(file_path, 'r') as hosts1:
@@ -20,3 +22,4 @@ def get_commit_diff(cm_file_path,file_path):
             )
             for line in diff:
                 file_diff(line)
+            
