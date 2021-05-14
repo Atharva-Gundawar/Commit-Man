@@ -41,15 +41,16 @@ commit msg => msg
 """
 
 def commit(dir_path,cm_dir,msg):
+    # Pass full paths for dir_path and cm_path
     v_num = 0
-    list_subfolders = [f.name for f in os.scandir(dir_path) if f.is_dir()]
+    list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
     for folder in list_subfolders:
         num = int(folder.split('_')[0][1:])
         v_num = num if v_num < num else v_num
-    folder_name = f'v{str(v_num + 1)}_{msg}'
-
-
+    cm_folder_name = f'v{str(v_num + 1)}_{msg}'
+    cm_folder_path = os.path.join(cm_dir, cm_folder_name)
+    os.mkdir(cm_folder_path)
+    copytree(dir_path,cm_folder_path)
     list_subfolders_with_paths = [dir_path + '/' + f for f in list_subfolders]
     return list_subfolders_with_paths
 
-commit("C:/Users/Atharva")
