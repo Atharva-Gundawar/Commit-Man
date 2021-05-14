@@ -51,6 +51,4 @@ def commit(dir_path,cm_dir,msg):
     cm_folder_path = os.path.join(cm_dir, cm_folder_name)
     os.mkdir(cm_folder_path)
     copytree(dir_path,cm_folder_path)
-    list_subfolders_with_paths = [dir_path + '/' + f for f in list_subfolders]
-    return list_subfolders_with_paths
-
+    
