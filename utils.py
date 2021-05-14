@@ -2,6 +2,13 @@ import os
 import difflib
 import shutil 
 
+"""
+format of saving files will be in the follwoing manner
+dir name => v[num]_[msg]
+commit number => num
+commit msg => msg
+"""
+
 def copytree(src, dst, symlinks=False, ignore=None):
     for item in os.listdir(src):
         s = os.path.join(src, item)
@@ -33,13 +40,6 @@ def get_commit_diff(cm_file_path,file_path):
             for line in diff:
                 file_diff(line)
             
-"""
-format of saving files will be in the follwoing manner
-dir name => v[num]_[msg]
-commit number => num
-commit msg => msg
-"""
-
 def commit(dir_path,cm_dir,msg):
     # Pass full paths for dir_path and cm_path
     v_num = 0
