@@ -1,5 +1,6 @@
 import os
 import difflib
+import shutil 
 
 def get_files(directory=os.curdir):
     files = []
@@ -25,16 +26,21 @@ def get_commit_diff(cm_file_path,file_path):
             
 """
 format of saving files will be in the follwoing manner
-dir name => v[number]_[msg]
+dir name => v[num]_[msg]
 commit number => num
 commit msg => msg
 """
 
-def commit(dir_path):
-# def commit(dir_path,cm_dir,messgae):
-    list_subfolders_with_paths = [f.path for f in os.scandir(dir_path) if f.is_dir()]
+def commit(dir_path,cm_dir,msg):
+    v_num = 0
     list_subfolders = [f.name for f in os.scandir(dir_path) if f.is_dir()]
-    list_subfolders_with_paths = [dir_path + '/' + f for f in list_subfolders ]
+    for folder in list_subfolders:
+        num = int(folder.split('_')[0][1:])
+        v_num = num if v_num < num else v_num
+    folder_name = f'v{str(v_num + 1)}_{msg}'
+
+
+    list_subfolders_with_paths = [dir_path + '/' + f for f in list_subfolders]
     return list_subfolders_with_paths
 
 commit("C:/Users/Atharva")
