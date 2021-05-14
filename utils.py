@@ -30,7 +30,11 @@ commit number => num
 commit msg => msg
 """
 
-def commit(dir_path,cm_dir,messgae):
+def commit(dir_path):
+# def commit(dir_path,cm_dir,messgae):
     list_subfolders_with_paths = [f.path for f in os.scandir(dir_path) if f.is_dir()]
-    print(list_subfolders_with_paths)
+    list_subfolders = [f.name for f in os.scandir(dir_path) if f.is_dir()]
+    list_subfolders_with_paths = [dir_path + '/' + f for f in list_subfolders ]
+    return list_subfolders_with_paths
 
+commit("C:/Users/Atharva")
