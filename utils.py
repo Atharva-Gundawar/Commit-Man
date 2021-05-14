@@ -52,21 +52,23 @@ def commit(dir_path,cm_dir,msg):
     os.mkdir(cm_folder_path)
     copytree(dir_path,cm_folder_path)
     
-def revert(code,is_num=True):
+def revert(code,dir_path,cm_dir,is_num=True):
     list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
     if is_num:
         try:
             for folder in list_subfolders:
                 if code == int(folder.split('_')[0][1:]):
-                    # revert code here lol
-                    pass
+                    os.rmdir(dir_path)
+                    os.mkdir(dir_path)
+                    copytree(dir_path,os.path.join(cm_dir, folder))            
         except :
             raise ValueError('Commit not found')
     else:
         try:
             for folder in list_subfolders:
                 if code == int(folder.split('_')[1]):
-                    # revert code here lol
-                    pass
+                    os.rmdir(dir_path)
+                    os.mkdir(dir_path)
+                    copytree(dir_path,os.path.join(cm_dir, folder))
         except :
             raise ValueError('Commit not found')
