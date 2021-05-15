@@ -4,10 +4,6 @@ import shutil
 import filecmp
 
 """
-format of saving files will be in the follwoing manner
-dir name => v[num]_[msg]
-commit number => num
-commit msg => msg
 
 folder structure:
     ├── .cm
@@ -29,7 +25,7 @@ def compare_trees(dir1, dir2):
     @return: True if the directory trees are the same and 
         there were no errors while accessing the directories or files, 
         False otherwise.
-   """
+    """
 
     dirs_cmp = filecmp.dircmp(dir1, dir2)
     if len(dirs_cmp.left_only)>0 or len(dirs_cmp.right_only)>0 or len(dirs_cmp.funny_files)>0:
@@ -46,6 +42,13 @@ def compare_trees(dir1, dir2):
     return True
  
 def copytree(src, dst, symlinks=False, ignore=None):
+    """
+    Copy a directory tree to another location.
+
+    @param src: source directory path
+    @param dst: destination directory path
+
+    """
     for item in os.listdir(src):
         s = os.path.join(src, item)
         d = os.path.join(dst, item)
@@ -54,14 +57,15 @@ def copytree(src, dst, symlinks=False, ignore=None):
         else:
             shutil.copy2(s, d)
 
-def get_files(directory=os.curdir):
-    files = []
-    for path, subdirs, files in os.walk(directory):
-        for name in files:
-            files.append(os.path.join(path, name))
-    return files
 
 def get_commit_diff(cm_file_path,file_path):
+    """
+    Prints line by line diff for 2 versions of a file .
+
+    @param cm_file_path: Old version of the file
+    @param file_path: New version of the file
+
+    """
     # cm_file_path is the path of the file saved inside the .cm folder.
     # file_path is the path of the file in the active directory.
     file_diff = []
@@ -77,6 +81,19 @@ def get_commit_diff(cm_file_path,file_path):
                 file_diff(line)
             
 def commit(dir_path,msg):
+    """
+    Commits latest version of the directory into a new dir 
+    in the .cm folder  
+    
+    @format
+    name => v[num]_[msg]
+    commit number => num
+    commit msg => msg
+
+    @param cm_file_path: Old version of the file
+    @param file_path: New version of the file
+
+    """
     # Pass full paths for dir_path and cm_path
     cm_dir=os.path.join(dir_path,'.cm')
     if os.path.isdir(cm_dir):
