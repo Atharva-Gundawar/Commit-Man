@@ -53,6 +53,7 @@ def commit(dir_path,cm_dir,msg):
     copytree(dir_path,cm_folder_path)
     
 def revert(code,dir_path,cm_dir,is_num=True):
+    # Pass full paths for dir_path and cm_path
     list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
     try:
         if is_num:
@@ -69,3 +70,10 @@ def revert(code,dir_path,cm_dir,is_num=True):
                     copytree(dir_path,os.path.join(cm_dir, folder))
     except:
         raise ValueError('Commit not found')
+
+def init(dir_path):
+    """
+    Make .cm folder
+    """
+    os.mkdir(os.path.join(dir_path, '.cm'))
+
