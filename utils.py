@@ -8,6 +8,14 @@ format of saving files will be in the follwoing manner
 dir name => v[num]_[msg]
 commit number => num
 commit msg => msg
+
+folder structure:
+    ├── .cm
+    ├── files and folders
+    ├── -------||-------
+    ├── -------||-------
+    └── -------||-------
+
 """
 
 def compare_trees(dir1, dir2):
