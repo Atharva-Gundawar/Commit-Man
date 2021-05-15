@@ -76,49 +76,66 @@ def get_commit_diff(cm_file_path,file_path):
             for line in diff:
                 file_diff(line)
             
-def commit(dir_path,cm_dir,msg):
+def commit(dir_path,msg):
     # Pass full paths for dir_path and cm_path
-    v_num = 0
-    list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
-    for folder in list_subfolders:
-        num = int(folder.split('_')[0][1:])
-        v_num = num if v_num < num else v_num
-    cm_folder_name = f'v{str(v_num + 1)}_{msg}'
-    cm_folder_path = os.path.join(cm_dir, cm_folder_name)
-    os.mkdir(cm_folder_path)
-    copytree(dir_path, cm_folder_path)
+    cm_dir=os.path.join(dir_path,'.cm')
+    if os.path.isdir(cm_dir):
+        try:
+            v_num = 0
+            list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
+            for folder in list_subfolders:
+                num = int(folder.split('_')[0][1:])
+                v_num = num if v_num < num else v_num
+            cm_folder_name = f'v{str(v_num + 1)}_{msg}'
+            cm_folder_path = os.path.join(cm_dir, cm_folder_name)
+            os.mkdir(cm_folder_path)
+            copytree(dir_path, cm_folder_path)
+        except Exception as e:
+            raise Exception(f'Commit failed because of {e}')
+    else:
+        raise Exception('Commit Man not initialized')
+
     
-def revert(code,dir_path,cm_dir,is_num=True,if_force=False):
+def revert(code,dir_path,is_num=True,if_force=False):
     # Pass full paths for dir_path and cm_path
-    list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
-    v_num = 0
-    for folder in list_subfolders:
-        num = int(folder.split('_')[0][1:])
-        v_num = num if v_num < num else v_num
-    for folder in list_subfolders:
-        if v_num == int(folder.split('_')[0][1:]):
-            if compare_trees(dir_path,os.path.join(cm_dir, folder)) or if_force:                     
-                try:
-                    if is_num:
-                        for folder in list_subfolders:
-                            if code == int(folder.split('_')[0][1:]):
-                                os.rmdir(dir_path)
-                                os.mkdir(dir_path)
-                                copytree(dir_path,os.path.join(cm_dir, folder))
-                    else :
-                        for folder in list_subfolders:
-                            if code == int(folder.split('_')[1]):
-                                os.rmdir(dir_path)
-                                os.mkdir(dir_path)
-                                copytree(dir_path,os.path.join(cm_dir, folder))
-                except:
-                    raise ValueError('Commit not found')
+    cm_dir=os.path.join(dir_path,'.cm')
+    if os.path.isdir(cm_dir):
+        list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
+        v_num = 0
+        for folder in list_subfolders:
+            num = int(folder.split('_')[0][1:])
+            v_num = num if v_num < num else v_num
+        for folder in list_subfolders:
+            if v_num == int(folder.split('_')[0][1:]):
+                if compare_trees(dir_path,os.path.join(cm_dir, folder)) or if_force:                     
+                    try:
+                        if is_num:
+                            for folder in list_subfolders:
+                                if code == int(folder.split('_')[0][1:]):
+                                    os.rmdir(dir_path)
+                                    os.mkdir(dir_path)
+                                    copytree(dir_path,os.path.join(cm_dir, folder))
+                        else :
+                            for folder in list_subfolders:
+                                if code == int(folder.split('_')[1]):
+                                    os.rmdir(dir_path)
+                                    os.mkdir(dir_path)
+                                    copytree(dir_path,os.path.join(cm_dir, folder))
+                    except:
+                        raise ValueError('Commit not found')
+                else:
+                    raise Exception('Latest code not commited')
             else:
-                raise Exception('Latest code not commited')
+                raise Exception('Latest version not found')
+    else:
+        raise Exception('Commit Man not initialized')
 
 def init(dir_path):
     """
     Make .cm folder
     """
-    os.mkdir(os.path.join(dir_path, '.cm'))
+    try:
+        os.mkdir(os.path.join(dir_path, '.cm'))
+    except Exception as e:
+        raise Exception('Initialization failed due to')
 
