@@ -57,7 +57,6 @@ def copytree(src, dst, symlinks=False, ignore=None):
         else:
             shutil.copy2(s, d)
 
-
 def get_commit_diff(cm_file_path,file_path):
     """
     Prints line by line diff for 2 versions of a file .
@@ -94,7 +93,6 @@ def commit(dir_path,msg):
     @param file_path: New version of the file
 
     """
-    # Pass full paths for dir_path and cm_path
     cm_dir=os.path.join(dir_path,'.cm')
     if os.path.isdir(cm_dir):
         try:
@@ -111,7 +109,6 @@ def commit(dir_path,msg):
             raise Exception(f'Commit failed because of {e}')
     else:
         raise Exception('Commit Man not initialized')
-
     
 def revert(code,dir_path,is_num=True,if_force=False):
     """
@@ -123,7 +120,6 @@ def revert(code,dir_path,is_num=True,if_force=False):
     @param is_num: Is True if code is num and False if code is msg
 
     """
-    # Pass full paths for dir_path and cm_path
     cm_dir=os.path.join(dir_path,'.cm')
     if os.path.isdir(cm_dir):
         list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
@@ -163,5 +159,5 @@ def init(dir_path):
     try:
         os.mkdir(os.path.join(dir_path, '.cm'))
     except Exception as e:
-        raise Exception('Initialization failed due to')
+        raise Exception(f'Initialization failed due to {e}')
 
