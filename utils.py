@@ -10,7 +10,7 @@ commit number => num
 commit msg => msg
 """
 
-def are_dir_trees_equal(dir1, dir2):
+def compare_trees(dir1, dir2):
     """
     Compare two directories recursively. Files in each directory are
     assumed to be equal if their names and contents are equal.
@@ -24,8 +24,7 @@ def are_dir_trees_equal(dir1, dir2):
    """
 
     dirs_cmp = filecmp.dircmp(dir1, dir2)
-    if len(dirs_cmp.left_only)>0 or len(dirs_cmp.right_only)>0 or \
-        len(dirs_cmp.funny_files)>0:
+    if len(dirs_cmp.left_only)>0 or len(dirs_cmp.right_only)>0 or len(dirs_cmp.funny_files)>0:
         return False
     (_, mismatch, errors) =  filecmp.cmpfiles(
         dir1, dir2, dirs_cmp.common_files, shallow=False)
@@ -34,7 +33,7 @@ def are_dir_trees_equal(dir1, dir2):
     for common_dir in dirs_cmp.common_dirs:
         new_dir1 = os.path.join(dir1, common_dir)
         new_dir2 = os.path.join(dir2, common_dir)
-        if not are_dir_trees_equal(new_dir1, new_dir2):
+        if not compare_trees(new_dir1, new_dir2):
             return False
     return True
  
@@ -79,26 +78,35 @@ def commit(dir_path,cm_dir,msg):
     cm_folder_name = f'v{str(v_num + 1)}_{msg}'
     cm_folder_path = os.path.join(cm_dir, cm_folder_name)
     os.mkdir(cm_folder_path)
-    copytree(dir_path,cm_folder_path)
+    copytree(dir_path, cm_folder_path)
     
-def revert(code,dir_path,cm_dir,is_num=True):
+def revert(code,dir_path,cm_dir,is_num=True,if_force=False):
     # Pass full paths for dir_path and cm_path
     list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
-    try:
-        if is_num:
-            for folder in list_subfolders:
-                if code == int(folder.split('_')[0][1:]):
-                    os.rmdir(dir_path)
-                    os.mkdir(dir_path)
-                    copytree(dir_path,os.path.join(cm_dir, folder))
-        else :
-            for folder in list_subfolders:
-                if code == int(folder.split('_')[1]):
-                    os.rmdir(dir_path)
-                    os.mkdir(dir_path)
-                    copytree(dir_path,os.path.join(cm_dir, folder))
-    except:
-        raise ValueError('Commit not found')
+    v_num = 0
+    for folder in list_subfolders:
+        num = int(folder.split('_')[0][1:])
+        v_num = num if v_num < num else v_num
+    for folder in list_subfolders:
+        if v_num == int(folder.split('_')[0][1:]):
+            if compare_trees(dir_path,os.path.join(cm_dir, folder)) or if_force:                     
+                try:
+                    if is_num:
+                        for folder in list_subfolders:
+                            if code == int(folder.split('_')[0][1:]):
+                                os.rmdir(dir_path)
+                                os.mkdir(dir_path)
+                                copytree(dir_path,os.path.join(cm_dir, folder))
+                    else :
+                        for folder in list_subfolders:
+                            if code == int(folder.split('_')[1]):
+                                os.rmdir(dir_path)
+                                os.mkdir(dir_path)
+                                copytree(dir_path,os.path.join(cm_dir, folder))
+                except:
+                    raise ValueError('Commit not found')
+            else:
+                raise Exception('Latest code not commited')
 
 def init(dir_path):
     """
