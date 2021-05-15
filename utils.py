@@ -114,6 +114,15 @@ def commit(dir_path,msg):
 
     
 def revert(code,dir_path,is_num=True,if_force=False):
+    """
+    Reverts to an old version
+
+    @param code: Vesion number or msg
+    @param dir_path: Path of the directory
+    @param if_force: To force revert in case of non commited 
+    @param is_num: Is True if code is num and False if code is msg
+
+    """
     # Pass full paths for dir_path and cm_path
     cm_dir=os.path.join(dir_path,'.cm')
     if os.path.isdir(cm_dir):
