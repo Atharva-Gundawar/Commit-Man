@@ -197,10 +197,10 @@ def init(dir_path):
     with open('log.csv', 'r', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(fields)
-    # try:
-    #     os.mkdir(os.path.join(dir_path, '.cm'))
-    #     with open(os.path.join(dir_path, 'log.json'),'r'):
-    #         print('log file created')
+    try:
+        os.mkdir(os.path.join(dir_path, '.cm'))
+        with open(os.path.join(dir_path, 'log.json'),'r'):
+            print('log file created')
         
-    # except Exception as e:
-    #     raise Exception(f'Initialization failed due to {e}')
+    except Exception as e:
+        raise Exception(f'Initialization failed due to {e}')
