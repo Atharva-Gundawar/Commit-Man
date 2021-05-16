@@ -24,16 +24,16 @@ Log file structure:
 def log_format_check(dir_path):
     pass
 
-
-
-def update_logfile(dir_path,msg,num):
-    cm_dir=os.path.join(dir_path,'.cm')
-    if (
-        isinstance(msg, str) and isinstance(num,int)
+def msg_and_num_check(msg, num):
+    return( isinstance(msg, str) and isinstance(num,int)
         and len(msg) > 0 and len(msg) < 128
         and num > 0
         and msg is not None and num is not None
-    ):
+        )
+
+def update_logfile(dir_path,msg,num):
+    cm_dir=os.path.join(dir_path,'.cm')
+    if msg_and_num_check(msg, num):
         if os.path.isdir(cm_dir):
             if os.path.exists(os.path.join(cm_dir,'log.csv')):
                 if log_format_check(os.path.join(cm_dir,'log.csv')):
