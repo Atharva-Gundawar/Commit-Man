@@ -21,12 +21,19 @@ Log file structure:
     Commit msg -> STRING (128>len>0)
     Commit Date & Time -> Datetime obj
 """
+def log_format_check(dir_path):
+    pass
+
 def update_logfile(dir_path,msg,num):
     cm_dir=os.path.join(dir_path,'.cm')
     if os.path.isdir(cm_dir):
         if os.path.exists(os.path.join(cm_dir,'log.csv')):
             if log_format_check(os.path.join(cm_dir,'log.csv')):
-                # update csv
+                datetime_IST = datetime.datetime.now(pytz.timezone('Asia/Kolkata'))     
+                fields=[str(num), str(msg), datetime_IST]
+                with open('log.csv', 'a', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow(fields)
                 pass
             else:
                 raise Exception('Log file corrupted, reinitialize log file with cm reinit')
@@ -185,10 +192,9 @@ def init(dir_path):
     Make .cm folder and log file
 
     @param dir_path: Path to directory 
-    """
-    tz_NY = pytz.timezone('Asia/Kolkata')   
+    """  
     fields=['Commit Number', 'Commit message', 'Datetime']
-    with open('log.csv', 'a', newline='') as f:
+    with open('log.csv', 'r', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(fields)
     # try:
