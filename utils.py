@@ -24,23 +24,36 @@ Log file structure:
 def log_format_check(dir_path):
     pass
 
+
+
 def update_logfile(dir_path,msg,num):
     cm_dir=os.path.join(dir_path,'.cm')
-    if os.path.isdir(cm_dir):
-        if os.path.exists(os.path.join(cm_dir,'log.csv')):
-            if log_format_check(os.path.join(cm_dir,'log.csv')):
-                datetime_IST = datetime.datetime.now(pytz.timezone('Asia/Kolkata'))     
-                fields=[str(num), str(msg), datetime_IST]
-                with open('log.csv', 'a', newline='') as f:
-                    writer = csv.writer(f)
-                    writer.writerow(fields)
-                pass
+    if (
+        isinstance(msg, str) and isinstance(num,int)
+        and len(msg) > 0 and len(msg) < 128
+        and num > 0
+        and msg is not None and num is not None
+    ):
+        if os.path.isdir(cm_dir):
+            if os.path.exists(os.path.join(cm_dir,'log.csv')):
+                if log_format_check(os.path.join(cm_dir,'log.csv')):
+                    try:
+                        datetime_IST = datetime.datetime.now(pytz.timezone('Asia/Kolkata'))     
+                        fields=[str(num), str(msg), datetime_IST]
+                        with open('log.csv', 'a', newline='') as f:
+                            writer = csv.writer(f)
+                            writer.writerow(fields)
+                    except Exception as e:
+                        raise Exception(e)
+                else:
+                    raise Exception('Log file corrupted, reinitialize log file with cm reinit')
             else:
-                raise Exception('Log file corrupted, reinitialize log file with cm reinit')
+                raise Exception('Cannot find log file')
         else:
-            raise Exception('Cannot find log file')
+            raise Exception('Commit man not initialized, use cm init for initialization')
     else:
-        raise Exception('Commit man not initialized, use cm init for initialization')
+        raise Exception('Check commit msg')
+
 
 def compare_trees(dir1, dir2):
     """
