@@ -25,8 +25,11 @@ def update_logfile(dir_path,msg,num):
     cm_dir=os.path.join(dir_path,'.cm')
     if os.path.isdir(cm_dir):
         if os.path.exists(os.path.join(cm_dir,'log.csv')):
-            # update log file and check if it is in the right format
-            pass
+            if log_format_check(os.path.join(cm_dir,'log.csv')):
+                # update csv
+                pass
+            else:
+                raise Exception('Log file corrupted, reinitialize log file with cm reinit')
         else:
             raise Exception('Cannot find log file')
     else:
