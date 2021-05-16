@@ -1,3 +1,4 @@
+# Created using simplepipreqs : pip install simplepipreqs : https://pypi.org/project/simplepipreqs/
 pytz==2020.1
 datetime==4.3
 csv==1.0
