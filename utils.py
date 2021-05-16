@@ -21,8 +21,18 @@ Log file structure:
     Commit msg -> STRING (128>len>0)
     Commit Date & Time -> Datetime obj
 """
-def log_format_check(dir_path):
-    pass
+def log_format_check(log_file_path):
+    with open(log_file_path, 'r') as log_file:
+        csv_reader = csv.reader(log_file, delimiter=',')
+        line_count = 0
+        for row in csv_reader:
+            if line_count == 0:
+                print(f'Column names are {", ".join(row)}')
+                line_count += 1
+            else:
+                print(f'\t{row[0]} works in the {row[1]} department, and was born in {row[2]}.')
+                line_count += 1
+        print(f'Processed {line_count} lines.')
 
 def msg_and_num_check(msg, num):
     return( isinstance(msg, str) and isinstance(num,int)
@@ -31,26 +41,22 @@ def msg_and_num_check(msg, num):
         and msg is not None and num is not None
         )
 
-def update_logfile(dir_path,msg,num):
-    cm_dir=os.path.join(dir_path,'.cm')
+def update_logfile(cm_dir,msg,num):
     if msg_and_num_check(msg, num):
-        if os.path.isdir(cm_dir):
-            if os.path.exists(os.path.join(cm_dir,'log.csv')):
-                if log_format_check(os.path.join(cm_dir,'log.csv')):
-                    try:
-                        datetime_IST = datetime.datetime.now(pytz.timezone('Asia/Kolkata'))     
-                        fields=[str(num), str(msg), datetime_IST]
-                        with open('log.csv', 'a', newline='') as f:
-                            writer = csv.writer(f)
-                            writer.writerow(fields)
-                    except Exception as e:
-                        raise Exception(e)
-                else:
-                    raise Exception('Log file corrupted, reinitialize log file with cm reinit')
+        if os.path.exists(os.path.join(cm_dir,'log.csv')):
+            if log_format_check(os.path.join(cm_dir,'log.csv')):
+                try:
+                    datetime_IST = datetime.datetime.now(pytz.timezone('Asia/Kolkata'))     
+                    fields=[str(num), str(msg), datetime_IST]
+                    with open('log.csv', 'a', newline='') as f:
+                        writer = csv.writer(f)
+                        writer.writerow(fields)
+                except Exception as e:
+                    raise Exception(e)
             else:
-                raise Exception('Cannot find log file')
+                raise Exception('Log file corrupted, reinitialize log file with cm reinit')
         else:
-            raise Exception('Commit man not initialized, use cm init for initialization')
+            raise Exception('Cannot find log file')
     else:
         raise Exception('Check commit msg')
 
@@ -144,7 +150,7 @@ def commit(dir_path,msg):
                 v_num = num if v_num < num else v_num
             if os.path.exists(os.path.join(cm_dir,'log.csv')):    
                 try:
-                    update_logfile(dir_path,msg)
+                    update_logfile(cm_dir,msg,v_num)
                 except Exception as e:
                     print(f'Updating file failed due to{e}')
             else:
@@ -206,14 +212,12 @@ def init(dir_path):
 
     @param dir_path: Path to directory 
     """  
-    fields=['Commit Number', 'Commit message', 'Datetime']
-    with open('log.csv', 'r', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerow(fields)
     try:
         os.mkdir(os.path.join(dir_path, '.cm'))
-        with open(os.path.join(dir_path, 'log.json'),'r'):
-            print('log file created')
+        fields=['Commit Number', 'Commit message', 'Datetime']
+        with open(os.path.join(os.path.join(dir_path, '.cm'),'log.csv'), 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(fields)
         
     except Exception as e:
         raise Exception(f'Initialization failed due to {e}')
