@@ -7,7 +7,6 @@ import datetime
 import csv   
 import sys
 
-
 """
 Folder structure:
     ├── .cm
@@ -26,7 +25,17 @@ Log file structure:
     Commit msg -> STRING (128>len>0)
     Commit Date & Time -> Datetime obj
 """
+
 def log_format_check(log_file_path):
+    """
+    Checks if the log file is in the correct format 
+    
+    @param log_file_path: Path to the log file
+
+    @return True if the log file is in the correct format
+            else returns False
+
+    """
     with open(log_file_path, 'r') as log_file:
         csv_reader = csv.reader(log_file, delimiter=',')
         line_count = 0
@@ -46,8 +55,17 @@ def log_format_check(log_file_path):
                         return False
     return True
 
-
 def msg_and_num_check(msg, num):
+    """
+    Checks Commit Message & Commit Number are in the correct format 
+    
+    @param msg: Commit Message
+    @param num: Commit Number
+
+    @return Commit Message & Commit Number are in the correct format
+            else returns False
+
+    """
     return( isinstance(msg, str) and isinstance(num,str)
         and len(msg) > 0 and len(msg) < 128
         and int(num) > 0
@@ -55,6 +73,14 @@ def msg_and_num_check(msg, num):
         )
 
 def update_logfile(cm_dir,msg,num):
+    """
+    Updates log file with Commit Message, Commit Number and Datetime
+    
+    @param cm_dir : Path to the Commit Man Directory 
+    @param msg: Commit Message
+    @param num: Commit Number
+
+    """
     if msg_and_num_check(msg, num):
         if os.path.exists(os.path.join(cm_dir,'log.csv')):
             if log_format_check(os.path.join(cm_dir,'log.csv')):
@@ -72,7 +98,6 @@ def update_logfile(cm_dir,msg,num):
             raise Exception('Cannot find log file')
     else:
         raise Exception('Check commit msg')
-
 
 def compare_trees(dir1, dir2):
     """
