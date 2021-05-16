@@ -22,7 +22,15 @@ Log file structure:
     Commit Date & Time -> Datetime obj
 """
 def update_logfile(dir_path,msg,num):
-    pass
+    cm_dir=os.path.join(dir_path,'.cm')
+    if os.path.isdir(cm_dir):
+        if os.path.exists(os.path.join(cm_dir,'log.csv')):
+            # update log file and check if it is in the right format
+            pass
+        else:
+            raise Exception('Cannot find log file')
+    else:
+        raise Exception('Commit man not initialized, use cm init for initialization')
 
 def compare_trees(dir1, dir2):
     """
