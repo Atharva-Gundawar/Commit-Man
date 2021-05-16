@@ -2,16 +2,23 @@ import os
 import difflib
 import shutil 
 import filecmp
+import pytz    
+import datetime
+import csv   
+
 
 """
-
-folder structure:
+Folder structure:
     ├── .cm
     ├── files and folders
     ├── -------||-------
     ├── -------||-------
     └── -------||-------
 
+Log file structure:
+    Commit num -> INT (>0)
+    Commit msg -> STRING (128>len>0)
+    Commit Date & Time -> Datetime obj
 """
 
 def compare_trees(dir1, dir2):
@@ -154,10 +161,20 @@ def revert(code,dir_path,is_num=True,if_force=False):
 
 def init(dir_path):
     """
-    Make .cm folder
+    Make .cm folder and log file
+
+    @param dir_path: Path to directory 
     """
+    tz_NY = pytz.timezone('Asia/Kolkata')   
+    datetime_NY = datetime.datetime.now(tz_NY)  
+    fields=['Commit Number', 'Commit message', 'Datetime']
+    with open('log.csv', 'a', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(fields)
     try:
         os.mkdir(os.path.join(dir_path, '.cm'))
+        with open(os.path.join(dir_path, 'log.json'),'r'):
+            print('log file created')
+        
     except Exception as e:
         raise Exception(f'Initialization failed due to {e}')
-
