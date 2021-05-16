@@ -189,8 +189,17 @@ def commit(dir_path,msg):
             if os.path.exists(os.path.join(cm_dir,'log.csv')):    
                 try:
                     update_logfile(cm_dir,msg,v_num)
-                except Exception as e:
-                    print(f'Updating file failed due to{e}')
+                except Exception as e1:
+                    # Deleteing the last entry of log.csv as commit failed
+                    try:
+                        with open(os.path.join(cm_dir,'log.csv'), "r+") as f:
+                            lines = f.readlines()
+                        lines.pop()
+                        with open(os.path.join(cm_dir,'log.csv'), "w+") as f:
+                            f.writelines(lines)
+                    except Exception as e2:
+                        raise Exception(f'Failed to delete last entry of log.csv due to {e2}')
+                    raise Exception(f'Updating file failed due to {e1}')
             else:
                 raise Exception('Log file not found, reinitialize using cm reinit')
             cm_folder_name = f'v{str(v_num + 1)}_{msg}'
@@ -251,6 +260,8 @@ def init(dir_path):
     @param dir_path: Path to directory 
     """  
     try:
+        if os.path.exists(os.path.join(dir_path, '.cm')):
+            sys.exit('Commit man already initialized for this directory')
         os.mkdir(os.path.join(dir_path, '.cm'))
         fields=['Commit Number', 'Commit message', 'Datetime']
         with open(os.path.join(os.path.join(dir_path, '.cm'),'log.csv'), 'w', newline='') as f:
