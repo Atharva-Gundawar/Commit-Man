@@ -11,6 +11,11 @@ import sys
 """
 Folder structure:
     ├── .cm
+    │   ├── log.csv
+    │   ├── Commit Folder
+    │   ├── Commit Folder
+    │   └── Commit Folder
+    │
     ├── files and folders
     ├── -------||-------
     ├── -------||-------
