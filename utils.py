@@ -5,6 +5,7 @@ import filecmp
 import pytz    
 import datetime
 import csv   
+import sys
 
 
 """
@@ -20,6 +21,8 @@ Log file structure:
     Commit msg -> STRING (128>len>0)
     Commit Date & Time -> Datetime obj
 """
+def update_logfile(dir_path,msg,num):
+    pass
 
 def compare_trees(dir1, dir2):
     """
@@ -89,7 +92,7 @@ def get_commit_diff(cm_file_path,file_path):
 def commit(dir_path,msg):
     """
     Commits latest version of the directory into a new dir 
-    in the .cm folder  
+    in the .cm folder and updates log file. 
     
     @format
     name => v[num]_[msg]
@@ -103,11 +106,18 @@ def commit(dir_path,msg):
     cm_dir=os.path.join(dir_path,'.cm')
     if os.path.isdir(cm_dir):
         try:
-            v_num = 0
+            v_num = 1
             list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
             for folder in list_subfolders:
                 num = int(folder.split('_')[0][1:])
                 v_num = num if v_num < num else v_num
+            if os.path.exists(os.path.join(cm_dir,'log.csv')):    
+                try:
+                    update_logfile(dir_path,msg)
+                except Exception as e:
+                    print(f'Updating file failed due to{e}')
+            else:
+                raise Exception('Log file not found, reinitialize using cm reinit')
             cm_folder_name = f'v{str(v_num + 1)}_{msg}'
             cm_folder_path = os.path.join(cm_dir, cm_folder_name)
             os.mkdir(cm_folder_path)
@@ -166,15 +176,14 @@ def init(dir_path):
     @param dir_path: Path to directory 
     """
     tz_NY = pytz.timezone('Asia/Kolkata')   
-    datetime_NY = datetime.datetime.now(tz_NY)  
     fields=['Commit Number', 'Commit message', 'Datetime']
     with open('log.csv', 'a', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(fields)
-    try:
-        os.mkdir(os.path.join(dir_path, '.cm'))
-        with open(os.path.join(dir_path, 'log.json'),'r'):
-            print('log file created')
+    # try:
+    #     os.mkdir(os.path.join(dir_path, '.cm'))
+    #     with open(os.path.join(dir_path, 'log.json'),'r'):
+    #         print('log file created')
         
-    except Exception as e:
-        raise Exception(f'Initialization failed due to {e}')
+    # except Exception as e:
+    #     raise Exception(f'Initialization failed due to {e}')
