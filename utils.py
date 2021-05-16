@@ -27,17 +27,25 @@ def log_format_check(log_file_path):
         line_count = 0
         for row in csv_reader:
             if line_count == 0:
-                print(f'Column names are {", ".join(row)}')
-                line_count += 1
+                if row != ['Commit Number', 'Commit message', 'Datetime'] :
+                    return False
+                else:
+                    line_count += 1
             else:
-                print(f'\t{row[0]} works in the {row[1]} department, and was born in {row[2]}.')
-                line_count += 1
-        print(f'Processed {line_count} lines.')
+                if row == []:
+                    line_count += 1
+                else:
+                    if msg_and_num_check(row[1], row[0]):
+                        line_count += 1
+                    else:
+                        return False
+    return True
+
 
 def msg_and_num_check(msg, num):
-    return( isinstance(msg, str) and isinstance(num,int)
+    return( isinstance(msg, str) and isinstance(num,str)
         and len(msg) > 0 and len(msg) < 128
-        and num > 0
+        and int(num) > 0
         and msg is not None and num is not None
         )
 
