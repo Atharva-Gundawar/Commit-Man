@@ -6,6 +6,7 @@ import pytz
 import datetime
 import csv   
 import sys
+import sqlite3
 
 """
 Folder structure:
@@ -19,6 +20,12 @@ Folder structure:
     ├── -------||-------
     ├── -------||-------
     └── -------||-------
+
+
+@Commit_Folder_Naming_Scheme
+    name => v[num]_[msg]
+    commit number => num
+    commit msg => msg
 
 Log file structure:
     Commit num -> INT (>0)
@@ -258,7 +265,7 @@ def init(dir_path):
     Make .cm folder and log file
 
     @param dir_path: Path to directory 
-    """  
+    """
     try:
         if os.path.exists(os.path.join(dir_path, '.cm')):
             sys.exit('Commit man already initialized for this directory')
@@ -268,5 +275,20 @@ def init(dir_path):
             writer = csv.writer(f)
             writer.writerow(fields)
         
+    except Exception as e:
+        raise Exception(f'Initialization failed due to {e}')
+    
+    try:
+        if os.path.exists(os.path.join(dir_path, '.cm')):
+            sys.exit('Commit man already initialized for this directory')
+        os.mkdir(os.path.join(dir_path, '.cm'))
+        fields=['Commit Number', 'Commit message', 'Datetime']
+        with open(os.path.join(os.path.join(dir_path, '.cm'),'log.db'), 'w') as f:
+            pass
+        con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
+        cur = con.cursor()
+        cur.execute('''CREATE TABLE log
+               (message text, number integer, datetime timestamp, qty real, price real)''')
+
     except Exception as e:
         raise Exception(f'Initialization failed due to {e}')
