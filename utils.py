@@ -285,12 +285,15 @@ def init(dir_path):
         fields=['Commit Number', 'Commit message', 'Datetime']
         with open(os.path.join(os.path.join(dir_path, '.cm'),'log.db'), 'w') as f:
             pass
-        con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
-        cur = con.cursor()
-        cur.execute('''CREATE TABLE log
-               (message text, number integer, datetime timestamp)''')
-        cur.execute('''INSERT INTO log (message, number, datetime )
-                VALUES('Created repo',0,datetime('now', 'localtime'))''')
+        try:
+            con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
+            cur = con.cursor()
+            cur.execute('''CREATE TABLE log
+                (message text, number integer, datetime timestamp)''')
+            cur.execute('''INSERT INTO log (message, number, datetime )
+                    VALUES('Created repo',0,datetime('now', 'localtime'))''')
+        except Exception as e:
+            print("Failed to Create log file", e)
 
     except Exception as e:
         raise Exception(f'Initialization failed due to {e}')
