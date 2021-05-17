@@ -271,18 +271,6 @@ def init(dir_path):
             sys.exit('Commit man already initialized for this directory')
         os.mkdir(os.path.join(dir_path, '.cm'))
         fields=['Commit Number', 'Commit message', 'Datetime']
-        with open(os.path.join(os.path.join(dir_path, '.cm'),'log.csv'), 'w', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow(fields)
-        
-    except Exception as e:
-        raise Exception(f'Initialization failed due to {e}')
-    
-    try:
-        if os.path.exists(os.path.join(dir_path, '.cm')):
-            sys.exit('Commit man already initialized for this directory')
-        os.mkdir(os.path.join(dir_path, '.cm'))
-        fields=['Commit Number', 'Commit message', 'Datetime']
         with open(os.path.join(os.path.join(dir_path, '.cm'),'log.db'), 'w') as f:
             pass
         try:
