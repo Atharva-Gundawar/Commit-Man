@@ -288,7 +288,9 @@ def init(dir_path):
         con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
         cur = con.cursor()
         cur.execute('''CREATE TABLE log
-               (message text, number integer, datetime timestamp, qty real, price real)''')
+               (message text, number integer, datetime timestamp)''')
+        cur.execute('''INSERT INTO log (message, number, datetime )
+                VALUES('Created repo',0,datetime('now', 'localtime'))''')
 
     except Exception as e:
         raise Exception(f'Initialization failed due to {e}')
