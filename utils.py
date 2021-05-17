@@ -294,6 +294,8 @@ def init(dir_path):
                     VALUES('Created repo',0,datetime('now', 'localtime'))''')
         except Exception as e:
             print("Failed to Create log file", e)
-
+        finally:
+            if con:
+                con.close()
     except Exception as e:
         raise Exception(f'Initialization failed due to {e}')
