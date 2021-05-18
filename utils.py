@@ -64,10 +64,11 @@ def update_logfile(cm_dir,msg,num):
     if msg_and_num_check(msg, num):
         if os.path.exists(os.path.join(cm_dir,'log.db')):
                 try:
-                    con = sqlite3.connect('log.db')
+                    con = sqlite3.connect(os.path.join(cm_dir,'log.db'))
                     cur = con.cursor()
-                    cur.execute('''INSERT INTO log (message, number, datetime ) VALUES('hello',123,datetime('now', 'localtime'))''')
+                    cur.execute(f'''INSERT INTO log (message, number, datetime ) VALUES({msg}, {num+1},datetime('now', 'localtime'))''')
                     con.commit()
+                    con.close()
                 except Exception as e:
                     raise Exception(f'SQL database could not be updated : {e}')
         else:
@@ -158,19 +159,20 @@ def commit(dir_path,msg):
     """
     cm_dir=os.path.join(dir_path,'.cm')
     if os.path.isdir(cm_dir):
-        if os.path.exists(os.path.join(cm_dir,'log.csv')):
+        if os.path.exists(os.path.join(cm_dir,'log.db')):
 
             try:
-                con = sqlite3.connect('log.db')
+                con = sqlite3.connect(os.path.join(cm_dir,'log.db'))
                 cur = con.cursor()
                 sqlite_select_query = """SELECT MAX(number) from log"""
                 cur.execute(sqlite_select_query)
                 v_num = cur.fetchall()[0][0]
+                con.close()
 
                 if v_num:
-                    pass
+                    update_logfile(cm_dir,msg,v_num)
                 else:
-                    raise Exception('Log file corrupted, reinitiate using cm reinit ')
+                    raise Exception('Log file corrupted, reinitiate using cm reinit')
 
             except Exception as e:
                 raise Exception(f'Log file not updated because of {e}')
@@ -187,10 +189,11 @@ def commit(dir_path,msg):
             print('Last commit failed , trying to delete from logs')
 
             try:
-                con = sqlite3.connect('log.db')
+                con = sqlite3.connect(os.path.join(cm_dir,'log.db'))
                 cur = con.cursor()
                 sqlite_select_query = f"""DELETE FROM log WHERE number={v_num};"""
                 cur.execute(sqlite_select_query)
+                con.close()
             except Exception as e:
                 raise Exception(f'Log file deletion failed because of {e}')
 
@@ -212,11 +215,12 @@ def revert(num,dir_path,if_force=False):
         list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
         v_num = 0
         try:
-            con = sqlite3.connect('log.db')
+            con = sqlite3.connect(os.path.join(cm_dir,'log.db'))
             cur = con.cursor()
             sqlite_select_query = """SELECT MAX(number) from log"""
             cur.execute(sqlite_select_query)
             big_num = cur.fetchall()[0][0]
+            con.close()
 
             if big_num:
                 v_num = big_num
@@ -265,6 +269,7 @@ def init(dir_path):
                 (message text, number integer, datetime timestamp)''')
             cur.execute('''INSERT INTO log (message, number, datetime )
                     VALUES('Created repo',0,datetime('now', 'localtime'))''')
+            con.close()
         except Exception as e:
             print("Failed to Create log file", e)
         finally:
