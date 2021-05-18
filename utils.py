@@ -11,7 +11,7 @@ import sqlite3
 """
 Folder structure:
     ├── .cm
-    │   ├── log.csv
+    │   ├── log.db
     │   ├── Commit Folder
     │   ├── Commit Folder
     │   └── Commit Folder
@@ -28,39 +28,11 @@ Folder structure:
     commit msg => msg
 
 Log file structure:
-    Commit num -> INT (>0)
-    Commit msg -> STRING (128>len>0)
-    Commit Date & Time -> Datetime obj
+    message -> TEXT,
+    number -> INT,
+    datetime -> TIMESTAMP
+
 """
-
-def log_format_check(log_file_path):
-    """
-    Checks if the log file is in the correct format 
-    
-    @param log_file_path: Path to the log file
-
-    @return True if the log file is in the correct format
-            else returns False
-
-    """
-    with open(log_file_path, 'r') as log_file:
-        csv_reader = csv.reader(log_file, delimiter=',')
-        line_count = 0
-        for row in csv_reader:
-            if line_count == 0:
-                if row != ['Commit Number', 'Commit message', 'Datetime'] :
-                    return False
-                else:
-                    line_count += 1
-            else:
-                if row == []:
-                    line_count += 1
-                else:
-                    if msg_and_num_check(row[1], row[0]):
-                        line_count += 1
-                    else:
-                        return False
-    return True
 
 def msg_and_num_check(msg, num):
     """
@@ -73,7 +45,7 @@ def msg_and_num_check(msg, num):
             else returns False
 
     """
-    return( isinstance(msg, str) and isinstance(num,str)
+    return(isinstance(msg, str) and isinstance(num,str)
         and len(msg) > 0 and len(msg) < 128
         and int(num) > 0
         and msg is not None and num is not None
@@ -88,19 +60,16 @@ def update_logfile(cm_dir,msg,num):
     @param num: Commit Number
 
     """
+
     if msg_and_num_check(msg, num):
-        if os.path.exists(os.path.join(cm_dir,'log.csv')):
-            if log_format_check(os.path.join(cm_dir,'log.csv')):
+        if os.path.exists(os.path.join(cm_dir,'log.db')):
                 try:
-                    datetime_IST = datetime.datetime.now(pytz.timezone('Asia/Kolkata'))     
-                    fields=[str(num), str(msg), datetime_IST]
-                    with open('log.csv', 'a', newline='') as f:
-                        writer = csv.writer(f)
-                        writer.writerow(fields)
+                    con = sqlite3.connect('log.db')
+                    cur = con.cursor()
+                    cur.execute('''INSERT INTO log (message, number, datetime ) VALUES('hello',123,datetime('now', 'localtime'))''')
+                    con.commit()
                 except Exception as e:
-                    raise Exception(e)
-            else:
-                raise Exception('Log file corrupted, reinitialize log file with cm reinit')
+                    raise Exception(f'SQL database could not be updated : {e}')
         else:
             raise Exception('Cannot find log file')
     else:
@@ -136,6 +105,8 @@ def compare_trees(dir1, dir2):
 def copytree(src, dst, symlinks=False, ignore=None):
     """
     Copy a directory tree to another location.
+    It ignores copying if .cm folder is found
+    in its path
 
     @param src: source directory path
     @param dst: destination directory path
@@ -144,7 +115,7 @@ def copytree(src, dst, symlinks=False, ignore=None):
     for item in os.listdir(src):
         s = os.path.join(src, item)
         d = os.path.join(dst, item)
-        if os.path.isdir(s):
+        if os.path.isdir(s) and '.cm' not in s:
             shutil.copytree(s, d, symlinks, ignore)
         else:
             shutil.copy2(s, d)
