@@ -159,6 +159,10 @@ def commit(dir_path,msg):
     cm_dir=os.path.join(dir_path,'.cm')
     if os.path.isdir(cm_dir):
         try:
+            
+
+
+
             v_num = 1
             list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
             for folder in list_subfolders:
