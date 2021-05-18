@@ -148,12 +148,12 @@ def commit(dir_path,msg):
     in the .cm folder and updates log file. 
     
     @format
-    name => v[num]_[msg]
+    name => num
     commit number => num
     commit msg => msg
 
-    @param cm_file_path: Old version of the file
-    @param file_path: New version of the file
+    @param dir_path: Path of the directory
+    @param msg: Commit msg 
 
     """
     cm_dir=os.path.join(dir_path,'.cm')
@@ -202,10 +202,9 @@ def revert(num,dir_path,if_force=False):
     """
     Reverts to an old version
 
-    @param code: Vesion number or msg
+    @param num: Vesion number
     @param dir_path: Path of the directory
     @param if_force: To force revert in case of non commited 
-    @param is_num: Is True if code is num and False if code is msg
 
     """
     cm_dir=os.path.join(dir_path,'.cm')
