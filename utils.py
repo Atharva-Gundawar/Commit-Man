@@ -23,7 +23,7 @@ Folder structure:
 
 
 @Commit_Folder_Naming_Scheme
-    name => v[num]_[msg]
+    name => [num]
     commit number => num
     commit msg => msg
 
@@ -159,27 +159,33 @@ def commit(dir_path,msg):
     cm_dir=os.path.join(dir_path,'.cm')
     if os.path.isdir(cm_dir):
         if os.path.exists(os.path.join(cm_dir,'log.csv')):
+
             try:
                 con = sqlite3.connect('log.db')
                 cur = con.cursor()
                 sqlite_select_query = """SELECT MAX(number) from log"""
                 cur.execute(sqlite_select_query)
                 v_num = cur.fetchall()[0][0]
+
                 if v_num:
                     v_num = int(cur.fetchall()[0][0])+1
                 else:
                     raise Exception('Log file corrupted, reinitiate using cm reinit ')
+
             except Exception as e:
                 raise Exception(f'Log file not updated because of {e}')
+        
         else:
             raise Exception('Log file not found, reinitialize using cm reinit')
+
         try:
-            cm_folder_name = f'v{str(v_num + 1)}_{msg}'
+            cm_folder_name = f'{v_num + 1}'
             cm_folder_path = os.path.join(cm_dir, cm_folder_name)
             os.mkdir(cm_folder_path)
             copytree(dir_path, cm_folder_path)
         except Exception as e:
             print('Last commit failed , trying to delete from logs')
+
             try:
                 con = sqlite3.connect('log.db')
                 cur = con.cursor()
@@ -187,6 +193,7 @@ def commit(dir_path,msg):
                 cur.execute(sqlite_select_query)
             except Exception as e:
                 raise Exception(f'Log file deletion failed because of {e}')
+
             raise Exception(f'Commit failed because of {e}')
     else:
         raise Exception('Commit Man not initialized')
