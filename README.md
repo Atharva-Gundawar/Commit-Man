@@ -1,6 +1,6 @@
-# Project Title
+# Commit man
 
-One Paragraph of project description goes here
+CLI for commit man a local version control system
 
 ## Getting Started
 
