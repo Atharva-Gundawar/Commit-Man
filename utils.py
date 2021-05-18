@@ -159,15 +159,20 @@ def commit(dir_path,msg):
     cm_dir=os.path.join(dir_path,'.cm')
     if os.path.isdir(cm_dir):
         try:
-            
-
-
-
-            v_num = 1
-            list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
-            for folder in list_subfolders:
-                num = int(folder.split('_')[0][1:])
-                v_num = num if v_num < num else v_num
+            con = sqlite3.connect('log.db')
+            cur = con.cursor()
+            sqlite_select_query = """SELECT MAX(number) from log"""
+            cur.execute(sqlite_select_query)
+            v_num = cur.fetchall()[0][0]
+            if v_num:
+                v_num = int(cur.fetchall()[0][0])+1
+            else:
+                raise Exception('Log file corrupted , reinitiate using cm reinit ')
+            # v_num = 1
+            # list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
+            # for folder in list_subfolders:
+            #     num = int(folder.split('_')[0][1:])
+            #     v_num = num if v_num < num else v_num
             if os.path.exists(os.path.join(cm_dir,'log.csv')):    
                 try:
                     update_logfile(cm_dir,msg,v_num)
