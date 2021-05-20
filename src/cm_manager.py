@@ -1,13 +1,10 @@
+
 import os
-import difflib
-import shutil 
-import filecmp
-import pytz    
-import datetime
-import csv   
 import sys
 import sqlite3
 
+from logfile_utils import LogUtils
+from file_system_utils import FileUtils
 """
 Folder structure:
     ├── .cm
@@ -95,7 +92,7 @@ class Commitman:
                     con.close()
 
                     if v_num:
-                        update_logfile(cm_dir,msg,v_num)
+                        LogUtils.update_logfile(cm_dir,msg,v_num)
                     else:
                         raise Exception('Log file corrupted, reinitiate using cm reinit')
 
@@ -109,7 +106,7 @@ class Commitman:
                 cm_folder_name = f'{v_num + 1}'
                 cm_folder_path = os.path.join(cm_dir, cm_folder_name)
                 os.mkdir(cm_folder_path)
-                copytree(dir_path, cm_folder_path)
+                FileUtils.copytree(dir_path, cm_folder_path)
             except Exception as e:
                 print('Last commit failed , trying to delete from logs')
 
@@ -159,11 +156,11 @@ class Commitman:
             if str(v_num) in list_subfolders:
                 for folder in list_subfolders:
                     if str(v_num) == folder:
-                        if compare_trees(dir_path,os.path.join(cm_dir, folder)) or if_force:                     
+                        if FileUtils.compare_trees(dir_path,os.path.join(cm_dir, folder)) or if_force:                     
                             try:
                                 os.rmdir(dir_path)
                                 os.mkdir(dir_path)
-                                copytree(dir_path,os.path.join(cm_dir, folder))
+                                FileUtils.copytree(dir_path,os.path.join(cm_dir, folder))
                             except Exception as e:
                                 raise Exception(f'Revert failed due to {e}')
                         else:
