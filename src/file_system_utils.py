@@ -4,7 +4,7 @@ import os
 import shutil
 import difflib
 
-class File_utils:
+class FileUtils:
     
     @staticmethod
     def compare_trees(dir1, dir2):

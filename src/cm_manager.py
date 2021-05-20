@@ -34,7 +34,7 @@ Log file structure:
 
 """
 
-class Commit_man:
+class Commitman:
 
     @staticmethod
     def init(dir_path):
