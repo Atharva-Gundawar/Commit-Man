@@ -1,12 +1,8 @@
-import os
-import difflib
-import shutil 
+
 import filecmp
-import pytz    
-import datetime
-import csv   
-import sys
-import sqlite3
+import os
+import shutil
+import difflib
 
 class File_utils:
     
