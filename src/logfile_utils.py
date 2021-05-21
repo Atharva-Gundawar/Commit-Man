@@ -4,7 +4,7 @@ import sqlite3
 
 class LogUtils:
     @staticmethod
-    def msg_and_num_check(msg, num):
+    def msgAndNumCheck(msg, num):
         """
         Checks Commit Message & Commit Number are in the correct format 
         
@@ -22,7 +22,7 @@ class LogUtils:
             )
     
     @staticmethod
-    def update_logfile(cm_dir,msg,num):
+    def updateLogfile(cm_dir,msg,num):
         """
         Updates log file with Commit Message, Commit Number and Datetime
         
@@ -32,7 +32,7 @@ class LogUtils:
 
         """
 
-        if msg_and_num_check(msg, num):
+        if msgAndNumCheck(msg, num):
             if os.path.exists(os.path.join(cm_dir,'log.db')):
                     try:
                         con = sqlite3.connect(os.path.join(cm_dir,'log.db'))
