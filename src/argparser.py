@@ -1,4 +1,8 @@
 from __init__ import __version__ as version
+import sys
+
+sys.dont_write_bytecode = True
+
 # import argparse
 
 # class GetArgumentParser:

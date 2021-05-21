@@ -3,8 +3,8 @@ import os
 import sys
 import sqlite3
 
-from logfile_utils import LogUtils
-from file_system_utils import FileUtils
+from logfileUtils import LogUtils
+from fileSystemUtils import FileUtils
 """
 Folder structure:
     ├── .cm
