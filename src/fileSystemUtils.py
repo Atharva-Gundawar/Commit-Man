@@ -28,58 +28,59 @@ class FileUtils:
                 )
                 for line in diff:
                     file_diff(line)
+    
+    @staticmethod
+    def compareTrees(dir1, dir2):
+        """
+        Compare two directories recursively. Files in each directory are
+        assumed to be equal if their names and contents are equal.
 
+        @param dir1: First directory path
+        @param dir2: Second directory path
 
-def compareTrees(dir1, dir2):
-    """
-    Compare two directories recursively. Files in each directory are
-    assumed to be equal if their names and contents are equal.
+        @return: True if the directory trees are the same and 
+            there were no errors while accessing the directories or files, 
+            False otherwise.
+        """
 
-    @param dir1: First directory path
-    @param dir2: Second directory path
-
-    @return: True if the directory trees are the same and 
-        there were no errors while accessing the directories or files, 
-        False otherwise.
-    """
-
-    dirs_cmp = filecmp.dircmp(dir1, dir2)
-    if len(dirs_cmp.left_only)>0 or len(dirs_cmp.right_only)>0 or len(dirs_cmp.funny_files)>0:
-        return False
-    (_, mismatch, errors) =  filecmp.cmpfiles(
-        dir1, dir2, dirs_cmp.common_files, shallow=False)
-    if len(mismatch)>0 or len(errors)>0:
-        return False
-    for common_dir in dirs_cmp.common_dirs:
-        new_dir1 = os.path.join(dir1, common_dir)
-        new_dir2 = os.path.join(dir2, common_dir)
-        if not compareTrees(new_dir1, new_dir2):
+        dirs_cmp = filecmp.dircmp(dir1, dir2)
+        if len(dirs_cmp.left_only)>0 or len(dirs_cmp.right_only)>0 or len(dirs_cmp.funny_files)>0:
             return False
-    return True
+        (_, mismatch, errors) =  filecmp.cmpfiles(
+            dir1, dir2, dirs_cmp.common_files, shallow=False)
+        if len(mismatch)>0 or len(errors)>0:
+            return False
+        for common_dir in dirs_cmp.common_dirs:
+            new_dir1 = os.path.join(dir1, common_dir)
+            new_dir2 = os.path.join(dir2, common_dir)
+            if not FileUtils.compareTrees(new_dir1, new_dir2):
+                return False
+        return True
+    
+    @staticmethod
+    def copyTree(src, dst, symlinks=False, ignore=None):
+        """
+        Copy a directory tree to another location.
+        It ignores copying if .cm folder is found
+        in its path
 
-def copyTree(src, dst, symlinks=False, ignore=None):
-    """
-    Copy a directory tree to another location.
-    It ignores copying if .cm folder is found
-    in its path
+        @param src: source directory path
+        @param dst: destination directory path
 
-    @param src: source directory path
-    @param dst: destination directory path
-
-    """
-    for item in os.listdir(src):
-        s = os.path.join(src, item)
-        d = os.path.join(dst, item)
-        if not (s.endswith('.cm') or s.endswith('.git')) :
-            if os.path.isdir(s):
-                if not os.path.isdir(d):
-                    os.mkdir(d)
-                copyTree(s, d, symlinks, ignore)
-            else:
-                if not os.path.isfile(d):
-                    with open(d,'w+') as f:
-                        pass
-                shutil.copy2(s, d)
+        """
+        for item in os.listdir(src):
+            s = os.path.join(src, item)
+            d = os.path.join(dst, item)
+            if not (s.endswith('.cm') or s.endswith('.git')) :
+                if os.path.isdir(s):
+                    if not os.path.isdir(d):
+                        os.mkdir(d)
+                    FileUtils.copyTree(s, d, symlinks, ignore)
+                else:
+                    if not os.path.isfile(d):
+                        with open(d,'w+') as f:
+                            pass
+                    shutil.copy2(s, d)
                 
 
-# copyTree(os.path.abspath(os.curdir),os.path.join(os.path.abspath(os.curdir),r'.cm\1'))
+# FileUtils.copyTree(os.path.abspath(os.curdir),os.path.join(os.path.abspath(os.curdir),r'.cm\1'))
