@@ -23,8 +23,8 @@ class GetArgumentParser:
 
                 Usage:
                     main.py cm init 
-                    main.py cm commit [-f | --force]
-                    main.py cm revert [-f | --force]
+                    main.py cm commit <message>
+                    main.py cm revert <number> [-f | --force]
                     main.py (-h | --help)
                     main.py --version
                 

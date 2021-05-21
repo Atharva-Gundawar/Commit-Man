@@ -5,6 +5,7 @@ import sqlite3
 
 from logfileUtils import LogUtils
 from fileSystemUtils import FileUtils
+
 """
 Folder structure:
     ├── .cm
@@ -31,7 +32,7 @@ Log file structure:
 
 """
 
-class Commitman:
+class CommitMan:
 
     @staticmethod
     def init(dir_path):
