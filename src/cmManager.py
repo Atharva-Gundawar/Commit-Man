@@ -3,7 +3,7 @@ import os
 import sys
 import sqlite3
 
-from logfileUtils import LogUtils
+from logfileUtils import msgAndNumCheck,updateLogfile
 from fileSystemUtils import FileUtils
 
 """
@@ -51,13 +51,12 @@ class CommitMan:
             try:
                 con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
                 cur = con.cursor()
-                cur.execute('''CREATE TABLE log
-                    (message text, number integer, datetime timestamp)''')
-                cur.execute('''INSERT INTO log (message, number, datetime )
-                        VALUES('Created repo',0,datetime('now', 'localtime'))''')
+                cur.execute('''CREATE TABLE log (message text, number integer, datetime timestamp)''')
+                cur.execute('''INSERT INTO log (message, number, datetime ) VALUES ('Created repo',0,datetime('now', 'localtime'))''')
+                con.commit()
                 con.close()
             except Exception as e:
-                print("Failed to Create log file", e)
+                print(f"Failed to Create log file due to : {e}")
             finally:
                 if con:
                     con.close()
@@ -90,10 +89,11 @@ class CommitMan:
                     sqlite_select_query = """SELECT MAX(number) from log"""
                     cur.execute(sqlite_select_query)
                     v_num = cur.fetchall()[0][0]
+                    con.commit()
                     con.close()
-
-                    if v_num:
-                        LogUtils.updateLogfile(cm_dir,msg,v_num)
+                    v_num+=1
+                    if isinstance(v_num,int) and v_num>=0:
+                        updateLogfile(cm_dir,msg,v_num)
                     else:
                         raise Exception('Log file corrupted, reinitiate using cm reinit')
 
@@ -104,7 +104,7 @@ class CommitMan:
                 raise Exception('Log file not found, reinitialize using cm reinit')
 
             try:
-                cm_folder_name = f'{v_num + 1}'
+                cm_folder_name = f'{v_num}'
                 cm_folder_path = os.path.join(cm_dir, cm_folder_name)
                 os.mkdir(cm_folder_path)
                 FileUtils.copyTree(dir_path, cm_folder_path)
@@ -116,6 +116,7 @@ class CommitMan:
                     cur = con.cursor()
                     sqlite_select_query = f"""DELETE FROM log WHERE number={v_num};"""
                     cur.execute(sqlite_select_query)
+                    con.commit()
                     con.close()
                 except Exception as e:
                     raise Exception(f'Log file deletion failed because of {e}')
@@ -144,6 +145,7 @@ class CommitMan:
                 sqlite_select_query = """SELECT MAX(number) from log"""
                 cur.execute(sqlite_select_query)
                 big_num = cur.fetchall()[0][0]
+                con.commit()
                 con.close()
 
                 if big_num:
