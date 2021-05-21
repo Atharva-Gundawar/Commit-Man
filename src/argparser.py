@@ -22,9 +22,9 @@ class GetArgumentParser:
         doc = """Commit Man.
 
                 Usage:
-                    main.py cm init 
-                    main.py cm commit <message>
-                    main.py cm revert <number> [-f | --force]
+                    main.py init 
+                    main.py commit <message>
+                    main.py revert <number> [-f | --force]
                     main.py (-h | --help)
                     main.py --version
                 
