@@ -48,10 +48,18 @@ class FileUtils:
         for item in os.listdir(src):
             s = os.path.join(src, item)
             d = os.path.join(dst, item)
-            if os.path.isdir(s) and '.cm' not in s:
-                shutil.copyTree(s, d, symlinks, ignore)
+            print(s)
+            # print(d)
+            if not s.endswith('.cm') or not s.endswith('.git'):
+                if os.path.isdir(s):
+                    print("                 ",s)
+                    copyTree(s, d, symlinks, ignore)
+                else:
+                    print(s)
+                    print(d)
+                    shutil.copy2(s, d)
             else:
-                shutil.copy2(s, d)
+                pass
 
     @staticmethod
     def get_commit_diff(cm_file_path,file_path):
@@ -75,4 +83,29 @@ class FileUtils:
                 )
                 for line in diff:
                     file_diff(line)
+def copyTree(src, dst, symlinks=False, ignore=None):
+    """
+    Copy a directory tree to another location.
+    It ignores copying if .cm folder is found
+    in its path
+
+    @param src: source directory path
+    @param dst: destination directory path
+
+    """
+    for item in os.listdir(src):
+        s = os.path.join(src, item)
+        d = os.path.join(dst, item)
+        if not (s.endswith('.cm') or s.endswith('.git')) :
+            if os.path.isdir(s):
+                if not os.path.isdir(d):
+                    os.mkdir(d)
+                copyTree(s, d, symlinks, ignore)
+            else:
+                if not os.path.isfile(d):
+                    with open(d,'w+') as f:
+                        pass
+                shutil.copy2(s, d)
                 
+
+# copyTree(os.path.abspath(os.curdir),os.path.join(os.path.abspath(os.curdir),r'.cm\1'))

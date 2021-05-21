@@ -4,7 +4,7 @@ import sys
 import sqlite3
 
 from logfileUtils import msgAndNumCheck,updateLogfile
-from fileSystemUtils import FileUtils
+from fileSystemUtils import copyTree
 
 """
 Folder structure:
@@ -107,7 +107,8 @@ class CommitMan:
                 cm_folder_name = f'{v_num}'
                 cm_folder_path = os.path.join(cm_dir, cm_folder_name)
                 os.mkdir(cm_folder_path)
-                FileUtils.copyTree(dir_path, cm_folder_path)
+                print(os.path.abspath(cm_folder_path))
+                copyTree(dir_path, cm_folder_path)
             except Exception as e:
                 print('Last commit failed , trying to delete from logs')
 
