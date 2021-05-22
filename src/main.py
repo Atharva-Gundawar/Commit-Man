@@ -12,6 +12,8 @@ def main():
         CommitMan.commit(cur_dir,arguments['<message>'])
     elif arguments['revert']:
         CommitMan.revert(arguments['<number>'],cur_dir,arguments['--force'])
+    elif arguments['reinit']:
+        CommitMan.reinit(cur_dir)
     else:
         print(argparse.doc)
 

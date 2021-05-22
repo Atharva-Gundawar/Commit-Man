@@ -24,6 +24,7 @@ class GetArgumentParser:
                 Usage:
                     main.py init 
                     main.py commit <message>
+                    main.py reinit
                     main.py revert <number> [-f | --force]
                     main.py (-h | --help)
                     main.py --version
