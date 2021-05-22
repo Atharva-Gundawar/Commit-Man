@@ -3,6 +3,11 @@ from argparser import GetArgumentParser
 from cmManager import CommitMan
 
 def main():
+    """
+    Main function which handles argumenst passed,
+    and calls respective functions. 
+
+    """
     argparse = GetArgumentParser()
     arguments = argparse.getArguments()
     cur_dir = os.path.abspath(os.path.curdir)

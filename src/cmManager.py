@@ -33,11 +33,20 @@ Log file structure:
 """
 
 class CommitMan:
-
+    """
+    CommitMan class contains all the main functions:
+    
+    @functions
+    Init   => Initializes Commit Man
+    Commit => Commits a version
+    Revert => Reverts back to a previous version
+    Reinit => Reinitializes Log file
+    
+    """
     @staticmethod
     def init(dir_path):
         """
-        Make .cm folder and log file
+        Makes .cm folder and log file.
 
         @param dir_path: Path to directory 
         """
@@ -71,8 +80,7 @@ class CommitMan:
         in the .cm folder and updates log file. 
         
         @format
-        name => num
-        commit number => num
+        name => commit number => num
         commit msg => msg
 
         @param dir_path: Path of the directory
@@ -177,6 +185,13 @@ class CommitMan:
 
     @staticmethod
     def reinit(dir_path):
+        """
+        Reinitializes log file if it is corrupted or
+        missing. 
+
+        @param dir_path: Path of the directory
+
+        """
         cm_dir=os.path.join(dir_path,'.cm')
         if os.path.isdir(cm_dir):
             if not os.path.exists(os.path.join(cm_dir,'log.db')):
