@@ -37,10 +37,10 @@ class CommitMan:
     CommitMan class contains all the main functions:
     
     @functions
-    Init   => Initializes Commit Man
-    Commit => Commits a version
-    Revert => Reverts back to a previous version
-    Reinit => Reinitializes Log file
+    init   => Initializes Commit Man
+    commit => Commits a version
+    revert => Reverts back to a previous version
+    reinit => Reinitializes Log file
     
     """
     @staticmethod
