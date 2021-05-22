@@ -81,6 +81,5 @@ class FileUtils:
                         with open(d,'w+') as f:
                             pass
                     shutil.copy2(s, d)
-                
 
 # FileUtils.copyTree(os.path.abspath(os.curdir),os.path.join(os.path.abspath(os.curdir),r'.cm\1'))
