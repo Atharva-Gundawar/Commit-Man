@@ -206,7 +206,6 @@ class CommitMan:
                 try:
                     con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
                     cur = con.cursor()
-                    cur.execute('''CREATE TABLE log (message text, number integer, datetime timestamp)''')
                     cur.execute('''INSERT INTO log (message, number, datetime ) VALUES ('Created repo',-1,datetime('now', 'localtime'))''')
                     cur.execute('''DELETE FROM log WHERE number=-1''')
                     con.commit()

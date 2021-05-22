@@ -48,5 +48,31 @@ class LogUtils:
                 raise Exception('Cannot find log file')
         else:
             raise Exception('Check commit msg')
-
-
+    
+    @staticmethod
+    def genrateLogfile(dir_path,test=False):
+        if not test:
+            with open(os.path.join(os.path.join(dir_path, '.cm'),'log.db'), 'w') as f:
+                pass
+            try:
+                con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
+                cur = con.cursor()
+                cur.execute('''CREATE TABLE log (message text, number integer, datetime timestamp)''')
+                cur.execute('''INSERT INTO log (message, number, datetime ) VALUES ('Created repo',0,datetime('now', 'localtime'))''')
+                con.commit()
+                con.close()
+            except Exception as e:
+                print(f"Failed to Create log file due to : {e}")
+            finally:
+                if con:
+                    con.close()
+        else:
+            try:
+                con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
+                cur = con.cursor()
+                cur.execute('''INSERT INTO log (message, number, datetime ) VALUES ('Created repo',-1,datetime('now', 'localtime'))''')
+                cur.execute('''DELETE FROM log WHERE number=-1''')
+                con.commit()
+                con.close()
+            except Exception:
+                return False
