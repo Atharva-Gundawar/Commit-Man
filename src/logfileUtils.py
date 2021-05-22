@@ -52,6 +52,7 @@ class LogUtils:
     @staticmethod
     def genrateLogfile(dir_path,test=False):
         if not test:
+            fields=['Commit Number', 'Commit message', 'Datetime']
             with open(os.path.join(os.path.join(dir_path, '.cm'),'log.db'), 'w') as f:
                 pass
             try:

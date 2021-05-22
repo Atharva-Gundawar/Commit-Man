@@ -179,63 +179,19 @@ class CommitMan:
     def reinit(dir_path):
         cm_dir=os.path.join(dir_path,'.cm')
         if os.path.isdir(cm_dir):
-            # list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir()]
-            # v_num = 0
-            # for i in list_subfolders:
-            #     try:
-            #         v_num = int(i) if int(i)>v_num else v_num
-            #     except:
-            #         pass
             if not os.path.exists(os.path.join(cm_dir,'log.db')):
-                fields=['Commit Number', 'Commit message', 'Datetime']
-                with open(os.path.join(os.path.join(dir_path, '.cm'),'log.db'), 'w') as f:
-                    pass
-                try:
-                    con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
-                    cur = con.cursor()
-                    cur.execute('''CREATE TABLE log (message text, number integer, datetime timestamp)''')
-                    cur.execute('''INSERT INTO log (message, number, datetime ) VALUES ('Created repo',0,datetime('now', 'localtime'))''')
-                    con.commit()
-                    con.close()
-                except Exception as e:
-                    print(f"Failed to Create log file due to : {e}")
-                finally:
-                    if con:
-                        con.close()
-            else: # Checking if insert works 
-                try:
-                    con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
-                    cur = con.cursor()
-                    cur.execute('''INSERT INTO log (message, number, datetime ) VALUES ('Created repo',-1,datetime('now', 'localtime'))''')
-                    cur.execute('''DELETE FROM log WHERE number=-1''')
-                    con.commit()
-                    con.close()
-                except Exception:
-                    os.remove(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
-                    fields=['Commit Number', 'Commit message', 'Datetime']
-                    with open(os.path.join(os.path.join(dir_path, '.cm'),'log.db'), 'w') as f:
-                        pass
-                    try:
-                        con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
-                        cur = con.cursor()
-                        cur.execute('''CREATE TABLE log (message text, number integer, datetime timestamp)''')
-                        cur.execute('''INSERT INTO log (message, number, datetime ) VALUES ('Created repo',0,datetime('now', 'localtime'))''')
-                        con.commit()
-                        con.close()
-                    except Exception as e:
-                        print(f"Failed to Create log file due to : {e}")
-                    finally:
-                        if con:
-                            con.close()
+                LogUtils.genrateLogfile(dir_path)
+            else: 
+                if LogUtils.genrateLogfile(dir_path,test=True):
+                    LogUtils.genrateLogfile(dir_path)
 
+            con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
+            cur = con.cursor()
             for f in os.scandir(cm_dir):
                 if f.is_dir():
-                    try:
-                        con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
-                        cur = con.cursor()
+                    try:                        
                         cur.execute(f'''INSERT INTO log (message, number, datetime ) VALUES ('Reinitialization Message',{int(f)},datetime('now', 'localtime'))''')
                         con.commit()
-                        con.close()
                     except Exception as e:
                         pass
             if con:
