@@ -234,14 +234,13 @@ class CommitMan:
                     try:
                         con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
                         cur = con.cursor()
-                        cur.execute('''INSERT INTO log (message, number, datetime ) VALUES ('Created repo',0,datetime('now', 'localtime'))''')
+                        cur.execute(f'''INSERT INTO log (message, number, datetime ) VALUES ('Reinitialization Message',{int(f)},datetime('now', 'localtime'))''')
                         con.commit()
                         con.close()
                     except Exception as e:
-                        print(f"Failed to Create log file due to : {e}")
-                    finally:
-                        if con:
-                            con.close()
-            
+                        pass
+            if con:
+                con.close()
+            print("Commit man succesfull reinitiated")
         else:
             raise Exception('Commit Man not initialized')
