@@ -5,11 +5,21 @@ import shutil
 import difflib
 
 class FileUtils:
-
+    """
+    FileUtils class contains all the functions
+    required to handle file operations
+    
+    @functions
+    get_commit_diff => Returns diffrence of 2 versions of a file.
+    compareTrees    => Compare two directories recursively.
+    copyTree        => Copy a directory tree to another location.
+    
+    """
+    
     @staticmethod
     def get_commit_diff(cm_file_path,file_path):
         """
-        Prints line by line diff for 2 versions of a file .
+        Prints line by line diffrence for 2 versions of a file .
 
         @param cm_file_path: Old version of the file
         @param file_path: New version of the file
@@ -61,8 +71,7 @@ class FileUtils:
     def copyTree(src, dst, symlinks=False, ignore=None):
         """
         Copy a directory tree to another location.
-        It ignores copying if .cm folder is found
-        in its path
+        It ignores copying if .cm folder.
 
         @param src: source directory path
         @param dst: destination directory path

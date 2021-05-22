@@ -4,6 +4,16 @@ import sqlite3
 import datetime
 
 class LogUtils:
+    """
+    LogUtils class contains all the functions
+    required to handle the Log file.
+    
+    @functions
+    msgAndNumCheck => Validates Message and number.
+    updateLogfile  => Updates log file with Commit Message and Commit Number.
+    genrateLogfile => Genrates and tests Logfile.
+    
+    """
 
     @staticmethod
     def msgAndNumCheck(msg, num):
@@ -51,6 +61,16 @@ class LogUtils:
     
     @staticmethod
     def genrateLogfile(dir_path,test=False):
+        """
+        Genrates and tests Logfile.
+        
+        @param cm_dir : Path to the Commit Man Directory. 
+        @param test   : True if in test mode.
+
+        @return
+        False if Logfile does not accept standard input.
+ 
+        """
         if not test:
             fields=['Commit Number', 'Commit message', 'Datetime']
             with open(os.path.join(os.path.join(dir_path, '.cm'),'log.db'), 'w') as f:
@@ -77,3 +97,4 @@ class LogUtils:
                 con.close()
             except Exception:
                 return False
+            return True
