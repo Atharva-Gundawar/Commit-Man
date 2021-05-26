@@ -13,6 +13,8 @@ class FileUtils:
     get_commit_diff => Returns diffrence of 2 versions of a file.
     compareTrees    => Compare two directories recursively.
     copyTree        => Copy a directory tree to another location.
+    silentremove    => Deletes file
+    rmtree          => Deletes folder recursively
     
     """
     
@@ -44,6 +46,7 @@ class FileUtils:
         """
         Compare two directories recursively. Files in each directory are
         assumed to be equal if their names and contents are equal.
+        It ignores specified folders and files.
 
         @param dir1: First directory path
         @param dir2: Second directory path
@@ -98,6 +101,12 @@ class FileUtils:
     
     @staticmethod
     def silentremove(filename):
+        """
+        Deletes file if exists .
+
+        @param filename : filename path
+
+        """
         try:
             os.remove(filename)
         except OSError as e:
@@ -106,6 +115,13 @@ class FileUtils:
     
     @staticmethod
     def rmtree(dir_path):
+        """
+        Deletes all files and folders from a directory
+        recursively while ignoreing the .cm and .git folder.
+        
+        @param dir_path: Path of the directory
+
+        """
         full_dir_path = os.path.abspath(dir_path)
         for item in os.listdir(dir_path):
             if not (item.endswith('.cm') or item.endswith('.git')) :
