@@ -106,12 +106,14 @@ class FileUtils:
     
     @staticmethod
     def rmtree(dir_path):
+        full_dir_path = os.path.abspath(dir_path)
         for item in os.listdir(dir_path):
             if not (item.endswith('.cm') or item.endswith('.git')) :
-                if os.path.isdir(item):
-                    shutil.rmtree(item)
+                if os.path.isdir(os.path.join(full_dir_path,item)):
+                    full_item_path = os.path.join(full_dir_path,item)
+                    shutil.rmtree(full_item_path)
                 else:
-                    FileUtils.silentremove(item)                
+                    FileUtils.silentremove(os.path.join(full_dir_path,item))
 
 # curdir = '../test'
 # print(FileUtils.compareTrees(os.path.abspath(curdir),os.path.join(os.path.abspath(curdir),r'.cm\3')))
