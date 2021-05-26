@@ -71,15 +71,20 @@ class LogUtils:
         False if Logfile does not accept standard input.
  
         """
+        cm_dir=os.path.join(dir_path, '.cm')
         if not test:
             fields=['Commit Number', 'Commit message', 'Datetime']
-            with open(os.path.join(os.path.join(dir_path, '.cm'),'log.db'), 'w') as f:
+            with open(os.path.join(cm_dir,'log.db'), 'w') as f:
                 pass
             try:
-                con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
+                con = sqlite3.connect(os.path.join(cm_dir,'log.db'))
                 cur = con.cursor()
                 cur.execute('''CREATE TABLE log (message text, number integer, datetime timestamp)''')
                 cur.execute('''INSERT INTO log (message, number, datetime ) VALUES ('Created repo',0,datetime('now', 'localtime'))''')
+                list_subfolders = [f.name for f in os.scandir(cm_dir) if f.is_dir() and f.name.isdigit()]
+                for folder in list_subfolders:    
+                    sql = '''INSERT INTO log (message, number, datetime ) VALUES(?,?,datetime('now', 'localtime'))'''
+                    cur.execute(sql,["Reinit msg",int(folder),])
                 con.commit()
                 con.close()
             except Exception as e:
@@ -89,7 +94,7 @@ class LogUtils:
                     con.close()
         else:
             try:
-                con = sqlite3.connect(os.path.join(os.path.join(dir_path, '.cm'),'log.db'))
+                con = sqlite3.connect(os.path.join(cm_dir,'log.db'))
                 cur = con.cursor()
                 cur.execute('''INSERT INTO log (message, number, datetime ) VALUES ('Created repo',-1,datetime('now', 'localtime'))''')
                 cur.execute('''DELETE FROM log WHERE number=-1''')
