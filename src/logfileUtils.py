@@ -43,7 +43,7 @@ class LogUtils:
         @param num: Commit Number
  
         """
-        if msgAndNumCheck(msg, num):
+        if LogUtils.msgAndNumCheck(msg, num):
             if os.path.exists(os.path.join(cm_dir,'log.db')):
                     try:
                         con = sqlite3.connect(os.path.join(cm_dir,'log.db'))
