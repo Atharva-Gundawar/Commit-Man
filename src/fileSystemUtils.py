@@ -54,8 +54,7 @@ class FileUtils:
         """
 
         dirs_cmp = filecmp.dircmp(dir1, dir2)
-        print(dirs_cmp)
-        if len(dirs_cmp.left_only)>0 or len(dirs_cmp.right_only)>0 or len(dirs_cmp.funny_files)>0:
+        if len(dirs_cmp.left_only)>1 or len(dirs_cmp.right_only)>0 or len(dirs_cmp.funny_files)>0:
             return False
         (_, mismatch, errors) =  filecmp.cmpfiles(
             dir1, dir2, dirs_cmp.common_files, shallow=False)
@@ -110,5 +109,6 @@ class FileUtils:
                     shutil.rmtree(item)
                 else:
                     FileUtils.silentremove(item)                
+
 # curdir = '../test'
 # print(FileUtils.compareTrees(os.path.abspath(curdir),os.path.join(os.path.abspath(curdir),r'.cm\3')))
