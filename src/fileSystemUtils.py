@@ -52,9 +52,12 @@ class FileUtils:
             there were no errors while accessing the directories or files, 
             False otherwise.
         """
-
+        ignore_folders_and_files = ['.git','.cm']
         dirs_cmp = filecmp.dircmp(dir1, dir2)
-        if len(dirs_cmp.left_only)>1 or len(dirs_cmp.right_only)>0 or len(dirs_cmp.funny_files)>0:
+        for item in dirs_cmp.left_only:
+            if item not in ignore_folders_and_files:
+                return False
+        if len(dirs_cmp.right_only)>0 or len(dirs_cmp.funny_files)>0:
             return False
         (_, mismatch, errors) =  filecmp.cmpfiles(
             dir1, dir2, dirs_cmp.common_files, shallow=False)
