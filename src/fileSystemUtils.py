@@ -101,6 +101,14 @@ class FileUtils:
         except OSError as e:
             if e.errno != errno.ENOENT:
                 raise 
-                    
+    
+    @staticmethod
+    def rmtree(dir_path):
+        for item in os.listdir(dir_path):
+            if not (item.endswith('.cm') or item.endswith('.git')) :
+                if os.path.isdir(item):
+                    shutil.rmtree(item)
+                else:
+                    FileUtils.silentremove(item)                
 # curdir = '../test'
 # print(FileUtils.compareTrees(os.path.abspath(curdir),os.path.join(os.path.abspath(curdir),r'.cm\3')))
