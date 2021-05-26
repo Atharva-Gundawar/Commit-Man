@@ -1,8 +1,8 @@
-
 import filecmp
 import os
 import shutil
 import difflib
+import errno
 
 class FileUtils:
     """
@@ -54,11 +54,14 @@ class FileUtils:
         """
 
         dirs_cmp = filecmp.dircmp(dir1, dir2)
+        print(dirs_cmp)
         if len(dirs_cmp.left_only)>0 or len(dirs_cmp.right_only)>0 or len(dirs_cmp.funny_files)>0:
             return False
         (_, mismatch, errors) =  filecmp.cmpfiles(
             dir1, dir2, dirs_cmp.common_files, shallow=False)
         if len(mismatch)>0 or len(errors)>0:
+            print("mistakes: ",mismatch)
+            print("errors: ",errors)
             return False
         for common_dir in dirs_cmp.common_dirs:
             new_dir1 = os.path.join(dir1, common_dir)
@@ -90,5 +93,14 @@ class FileUtils:
                         with open(d,'w+') as f:
                             pass
                     shutil.copy2(s, d)
-
-# FileUtils.copyTree(os.path.abspath(os.curdir),os.path.join(os.path.abspath(os.curdir),r'.cm\1'))
+    
+    @staticmethod
+    def silentremove(filename):
+        try:
+            os.remove(filename)
+        except OSError as e:
+            if e.errno != errno.ENOENT:
+                raise 
+                    
+# curdir = '../test'
+# print(FileUtils.compareTrees(os.path.abspath(curdir),os.path.join(os.path.abspath(curdir),r'.cm\3')))
