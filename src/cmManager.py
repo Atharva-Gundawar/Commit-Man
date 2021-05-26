@@ -5,6 +5,7 @@ import sqlite3
 
 from logfileUtils import LogUtils
 from fileSystemUtils import FileUtils
+import shutil
 
 """
 Folder structure:
@@ -167,11 +168,11 @@ class CommitMan:
             if str(v_num) in list_subfolders:
                 for folder in list_subfolders:
                     if str(v_num) == folder:
-                        if FileUtils.compareTrees(dir_path,os.path.join(cm_dir, folder)) or if_force:                     
+                        if FileUtils.compareTrees(dir_path,os.path.join(cm_dir, folder)) or if_force or True:                     
                             try:
-                                os.rmdir(dir_path)
-                                os.mkdir(dir_path)
-                                FileUtils.copyTree(dir_path,os.path.join(cm_dir, folder))
+                                FileUtils.rmtree(dir_path)
+                                print(dir_path,folder)
+                                FileUtils.copyTree(os.path.join(cm_dir, num),dir_path)
                             except Exception as e:
                                 raise Exception(f'Revert failed due to {e}')
                         else:
