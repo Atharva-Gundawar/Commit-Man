@@ -1,3 +1,4 @@
+# Command descriptions for Commit Man
 commands = {
     'init' : """
 Initialize Commit man in the current directory

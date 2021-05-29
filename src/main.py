@@ -11,7 +11,6 @@ def main():
     """
     argparse = GetArgumentParser()
     arguments = argparse.getArguments()
-    # print(arguments)
     cur_dir = os.path.abspath(os.path.curdir)
     cur_dir = '../test'
     if arguments['init']:
@@ -25,6 +24,7 @@ def main():
     elif arguments['man']:
         print("\n")
         print("#"*60)
+        print('-'*60)
         for command in manPages.commands.keys():
             print(f'\n{command}:\n{manPages.commands[command]}')
             print('-'*60)
