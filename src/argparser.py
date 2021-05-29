@@ -40,9 +40,9 @@ class GetArgumentParser:
                     main.py commit <message>
                     main.py reinit
                     main.py revert <number> [-f | --force]
+                    main.py man
                     main.py (-h | --help)
                     main.py --version
-                
                 Options:
                     -h --help     Show this screen.
                     -f --force    Force

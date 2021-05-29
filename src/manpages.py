@@ -1,30 +1,30 @@
-class ManPages:
-    init = """
+commands = {
+    'init' : """
 Initialize Commit man in the current directory
 
 Usage : cm init
 
 This will create a .cm folder in the current directory,
 and a log file inside that folder.
-"""
+""",
 
-    reinit = """
+    "reinit" : """
 Reinitialize Commit man in the current directory
 
 Usage : cm reinit
 
 This will reinitialize .cm folder in case of
 logfile corruption or unavailability.
-"""
+""",
     
-    commit = """
+    "commit" : """
 Commits curent version of working directory
 
 Usage : cm commit <message>
 
 This will create a new commit folder insider the .cm folder.
-"""
-    revert = """
+""",
+    "revert" : """
 reverts to an old version of working directory
 
 Usage : cm revert <Commit_Number> [-f | --force]
@@ -33,3 +33,4 @@ This revert to an older version of the project and with the
 force option revert will take place even if the latest code 
 has not been commited.
 """
+}
