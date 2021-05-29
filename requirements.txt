@@ -1,4 +1,2 @@
+docopt==0.6.2
 datetime==4.3
-pytz==2020.1
-argparse==1.4.0
-csv==1.0
