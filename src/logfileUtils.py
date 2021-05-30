@@ -114,18 +114,24 @@ class LogUtils:
         """
         try:
             cm_dir=os.path.join(dir_path, '.cm')
-            log_path = os.path.join(cm_dir,'log.db')
-            con = sqlite3.connect(log_path)
-            cur = con.cursor()
-            sqlite_select_query = """SELECT * from log"""
-            cur.execute(sqlite_select_query)
-            rows = cur.fetchall()
-            rows  = [list(row) for row in rows]
-            print('\n')
-            rows = [['Commit Message','Commit Number','Commit Datetime']] + [[' ',' ',' ']] + rows
-            for row in rows:
-                print(("{:<35}"*len(row)).format(*row))
-            con.close()
-            print('\n')
+            if os.path.exists(cm_dir):
+                log_path = os.path.join(cm_dir,'log.db')
+                if os.path.exists(log_path):
+                    con = sqlite3.connect(log_path)
+                    cur = con.cursor()
+                    sqlite_select_query = """SELECT * from log"""
+                    cur.execute(sqlite_select_query)
+                    rows = cur.fetchall()
+                    rows  = [list(row) for row in rows]
+                    print('\n')
+                    rows = [['Commit Message','Commit Number','Commit Datetime']] + [[' ',' ',' ']] + rows
+                    for row in rows:
+                        print(("{:<35}"*len(row)).format(*row))
+                    con.close()
+                    print('\n')
+                else:
+                    print('Could not find log file, reinitiate using cm reinit')
+            else:
+                print('Commit Man not initialized, initialize using cm init')
         except:
             raise
