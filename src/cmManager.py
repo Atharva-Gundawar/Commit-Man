@@ -1,11 +1,11 @@
-
 import os
 import sys
+import shutil
 import sqlite3
+import subprocess
 
 from logfileUtils import LogUtils
 from fileSystemUtils import FileUtils
-import shutil
 
 """
 Folder structure:
@@ -55,6 +55,13 @@ class CommitMan:
             if os.path.exists(os.path.join(dir_path, '.cm')):
                 sys.exit('Commit man already initialized for this directory')
             os.mkdir(os.path.join(dir_path, '.cm'))
+            try:
+                if os.name == 'nt':
+                    errcode = subprocess.check_call(["attrib","+H",os.path.join(dir_path, '.cm')])
+                    if errcode != 0:
+                        print("Failed to hide .cm folder")
+            except:
+                raise
             fields=['Commit Number', 'Commit message', 'Datetime']
             with open(os.path.join(os.path.join(dir_path, '.cm'),'log.db'), 'w') as f:
                 pass
