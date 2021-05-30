@@ -15,7 +15,8 @@ class FileUtils:
     copyTree        => Copy a directory tree to another location.
     silentremove    => Deletes file
     rmtree          => Deletes folder recursively
-    
+    in_ignored      => Whether file is in gitignore 
+
     """
     @staticmethod
     def in_ignored(file_path,gitignore_path):
@@ -150,8 +151,3 @@ class FileUtils:
                     shutil.rmtree(full_item_path)
                 else:
                     FileUtils.silentremove(os.path.join(full_dir_path,item))
-
-# curdir = '../test'
-# print(FileUtils.compareTrees(os.path.abspath(curdir),os.path.join(os.path.abspath(curdir),r'.cm\3')))
-# print(FileUtils.in_ignored('Pipfile','.gitignore'))
-# print(FileUtils.in_ignored('.env','.gitignore'))
