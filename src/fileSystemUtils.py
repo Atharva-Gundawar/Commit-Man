@@ -18,17 +18,20 @@ class FileUtils:
     
     """
     @staticmethod
-    def in_ignored(file_name,gitignore_path):
+    def in_ignored(file_path,gitignore_path):
         """
         Ignores files and folders from the gitignore file.
 
-        @param file_name: Name of the file.
+        @param file_path: Name of the file.
         @param gitignore_path: Path to the gitignore file.
 
         @return: True if matches gitignore, else False.
         """
-        matches_gitignore = parse_gitignore(gitignore_path)
-        return matches_gitignore(os.path.abspath(file_name))
+        if os.path.exists(gitignore_path):
+            matches_gitignore = parse_gitignore(gitignore_path)
+            return matches_gitignore(os.path.abspath(file_path))
+        else:
+            return False
 
     @staticmethod
     def get_commit_diff(cm_file_path,file_path):
@@ -73,7 +76,7 @@ class FileUtils:
         ignore_folders_and_files = ['.git','.cm','.gitignore'] 
         dirs_cmp = filecmp.dircmp(dir1, dir2)
         for item in dirs_cmp.left_only:
-            if item not in ignore_folders_and_files and not FileUtils.in_ignored(item,gitignore_path):
+            if item not in ignore_folders_and_files and not FileUtils.in_ignored(os.path.join(dir1,item),gitignore_path):
                 return False
         if len(dirs_cmp.right_only)>0 or len(dirs_cmp.funny_files)>0:
             return False
@@ -104,7 +107,7 @@ class FileUtils:
         for item in os.listdir(src):
             s = os.path.join(src, item)
             d = os.path.join(dst, item)
-            if os.path.basename(s) not in ignore_folders_and_files and not FileUtils.in_ignored(os.path.basename(s),gitignore_path):
+            if os.path.basename(s) not in ignore_folders_and_files and not FileUtils.in_ignored(s,gitignore_path):
                 if os.path.isdir(s):
                     if not os.path.isdir(d):
                         os.mkdir(d)
@@ -141,7 +144,7 @@ class FileUtils:
         full_dir_path = os.path.abspath(dir_path)
         ignore_folders_and_files = ['.git','.cm','.gitignore'] 
         for item in os.listdir(dir_path):
-            if item not in ignore_folders_and_files and not FileUtils.in_ignored(item,gitignore_path):
+            if item not in ignore_folders_and_files and not FileUtils.in_ignored(os.path.join(dir_path,item),gitignore_path):
                 if os.path.isdir(os.path.join(full_dir_path,item)):
                     full_item_path = os.path.join(full_dir_path,item)
                     shutil.rmtree(full_item_path)

@@ -171,7 +171,6 @@ class CommitMan:
                         if FileUtils.compareTrees(dir_path,os.path.join(cm_dir, folder), os.path.join(dir_path,'.gitignore')) or if_force or True:                     
                             try:
                                 FileUtils.rmtree(dir_path, os.path.join(dir_path,'.gitignore'))
-                                print(dir_path,folder)
                                 FileUtils.copyTree(os.path.join(cm_dir, num),dir_path, os.path.join(dir_path,'.gitignore'))
                             except Exception as e:
                                 raise Exception(f'Revert failed due to {e}')
