@@ -19,6 +19,14 @@ class FileUtils:
     """
     @staticmethod
     def in_ignored(file_name,gitignore_path):
+        """
+        Ignores files and folders from the gitignore file.
+
+        @param file_name: Name of the file.
+        @param gitignore_path: Path to the gitignore file.
+
+        @return: True if matches gitignore, else False.
+        """
         matches_gitignore = parse_gitignore(gitignore_path)
         return matches_gitignore(os.path.abspath(file_name))
 
