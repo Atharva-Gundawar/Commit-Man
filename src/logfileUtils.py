@@ -73,7 +73,6 @@ class LogUtils:
         """
         cm_dir=os.path.join(dir_path, '.cm')
         if not test:
-            fields=['Commit Number', 'Commit message', 'Datetime']
             with open(os.path.join(cm_dir,'log.db'), 'w') as f:
                 pass
             try:

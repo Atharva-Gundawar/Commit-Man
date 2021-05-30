@@ -62,7 +62,6 @@ class CommitMan:
                         print("Failed to hide .cm folder")
             except:
                 raise
-            fields=['Commit Number', 'Commit message', 'Datetime']
             with open(os.path.join(os.path.join(dir_path, '.cm'),'log.db'), 'w') as f:
                 pass
             try:
@@ -214,7 +213,7 @@ class CommitMan:
                     try:                        
                         cur.execute(f'''INSERT INTO log (message, number, datetime ) VALUES ('Reinitialization Message',{int(f)},datetime('now', 'localtime'))''')
                         con.commit()
-                    except Exception as e:
+                    except:
                         pass
             if con:
                 con.close()

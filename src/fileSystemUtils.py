@@ -56,7 +56,7 @@ class FileUtils:
                     tofile='new',
                 )
                 for line in diff:
-                    file_diff(line)
+                    file_diff.append(line)
         return file_diff
 
     @staticmethod
@@ -91,7 +91,7 @@ class FileUtils:
         for common_dir in dirs_cmp.common_dirs:
             new_dir1 = os.path.join(dir1, common_dir)
             new_dir2 = os.path.join(dir2, common_dir)
-            if not FileUtils.compareTrees(new_dir1, new_dir2):
+            if not FileUtils.compareTrees(new_dir1, new_dir2, gitignore_path):
                 return False
         return True
     
