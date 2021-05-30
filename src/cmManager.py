@@ -130,7 +130,7 @@ class CommitMan:
                 except Exception as e:
                     raise Exception(f'Log file deletion failed because of {e}')
 
-                raise Exception(f'Commit failed because of {e}')
+                raise Exception(f'Commit failed due to {e}')
         else:
             raise Exception('Commit Man not initialized')
     

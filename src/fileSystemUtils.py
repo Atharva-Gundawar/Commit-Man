@@ -1,9 +1,9 @@
+from gitignore_parser import parse_gitignore
 import filecmp
 import os
 import shutil
 import difflib
 import errno
-
 class FileUtils:
     """
     FileUtils class contains all the functions
@@ -17,7 +17,11 @@ class FileUtils:
     rmtree          => Deletes folder recursively
     
     """
-    
+    @staticmethod
+    def in_ignored(file_name,gitignore_path):
+        matches_gitignore = parse_gitignore(gitignore_path)
+        return matches_gitignore(os.path.abspath(file_name))
+
     @staticmethod
     def get_commit_diff(cm_file_path,file_path):
         """
@@ -40,9 +44,10 @@ class FileUtils:
                 )
                 for line in diff:
                     file_diff(line)
-    
+        return file_diff
+
     @staticmethod
-    def compareTrees(dir1, dir2):
+    def compareTrees(dir1, dir2, gitignore_path):
         """
         Compare two directories recursively. Files in each directory are
         assumed to be equal if their names and contents are equal.
@@ -55,10 +60,12 @@ class FileUtils:
             there were no errors while accessing the directories or files, 
             False otherwise.
         """
-        ignore_folders_and_files = ['.git','.cm']
+        # Files that have to be ignores but are not in .gitignore
+
+        ignore_folders_and_files = ['.git','.cm','.gitignore'] 
         dirs_cmp = filecmp.dircmp(dir1, dir2)
         for item in dirs_cmp.left_only:
-            if item not in ignore_folders_and_files:
+            if item not in ignore_folders_and_files and not FileUtils.in_ignored(item,gitignore_path):
                 return False
         if len(dirs_cmp.right_only)>0 or len(dirs_cmp.funny_files)>0:
             return False
@@ -76,7 +83,7 @@ class FileUtils:
         return True
     
     @staticmethod
-    def copyTree(src, dst, symlinks=False, ignore=None):
+    def copyTree(src, dst, gitignore_path, symlinks=False, ignore=None):
         """
         Copy a directory tree to another location.
         It ignores copying if .cm folder.
@@ -85,14 +92,15 @@ class FileUtils:
         @param dst: destination directory path
 
         """
+        ignore_folders_and_files = ['.git','.cm','.gitignore'] 
         for item in os.listdir(src):
             s = os.path.join(src, item)
             d = os.path.join(dst, item)
-            if not (s.endswith('.cm') or s.endswith('.git')) :
+            if os.path.basename(s) not in ignore_folders_and_files and not FileUtils.in_ignored(os.path.basename(s),gitignore_path):
                 if os.path.isdir(s):
                     if not os.path.isdir(d):
                         os.mkdir(d)
-                    FileUtils.copyTree(s, d, symlinks, ignore)
+                    FileUtils.copyTree(s, d, gitignore_path, symlinks, ignore)
                 else:
                     if not os.path.isfile(d):
                         with open(d,'w+') as f:
@@ -114,7 +122,7 @@ class FileUtils:
                 raise 
     
     @staticmethod
-    def rmtree(dir_path):
+    def rmtree(dir_path,gitignore_path):
         """
         Deletes all files and folders from a directory
         recursively while ignoreing the .cm and .git folder.
@@ -123,8 +131,9 @@ class FileUtils:
 
         """
         full_dir_path = os.path.abspath(dir_path)
+        ignore_folders_and_files = ['.git','.cm','.gitignore'] 
         for item in os.listdir(dir_path):
-            if not (item.endswith('.cm') or item.endswith('.git')) :
+            if item not in ignore_folders_and_files and not FileUtils.in_ignored(item,gitignore_path):
                 if os.path.isdir(os.path.join(full_dir_path,item)):
                     full_item_path = os.path.join(full_dir_path,item)
                     shutil.rmtree(full_item_path)
@@ -133,3 +142,5 @@ class FileUtils:
 
 # curdir = '../test'
 # print(FileUtils.compareTrees(os.path.abspath(curdir),os.path.join(os.path.abspath(curdir),r'.cm\3')))
+# print(FileUtils.in_ignored('Pipfile','.gitignore'))
+# print(FileUtils.in_ignored('.env','.gitignore'))
