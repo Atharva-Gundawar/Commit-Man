@@ -116,7 +116,7 @@ class CommitMan:
                 cm_folder_name = f'{v_num}'
                 cm_folder_path = os.path.join(cm_dir, cm_folder_name)
                 os.mkdir(cm_folder_path)
-                FileUtils.copyTree(dir_path, cm_folder_path)
+                FileUtils.copyTree(dir_path, cm_folder_path, os.path.join(dir_path,'.gitignore'))
             except Exception as e:
                 print('Last commit failed , trying to delete from logs')
 
@@ -168,11 +168,11 @@ class CommitMan:
             if str(v_num) in list_subfolders:
                 for folder in list_subfolders:
                     if str(v_num) == folder:
-                        if FileUtils.compareTrees(dir_path,os.path.join(cm_dir, folder)) or if_force or True:                     
+                        if FileUtils.compareTrees(dir_path,os.path.join(cm_dir, folder), os.path.join(dir_path,'.gitignore')) or if_force or True:                     
                             try:
-                                FileUtils.rmtree(dir_path)
+                                FileUtils.rmtree(dir_path, os.path.join(dir_path,'.gitignore'))
                                 print(dir_path,folder)
-                                FileUtils.copyTree(os.path.join(cm_dir, num),dir_path)
+                                FileUtils.copyTree(os.path.join(cm_dir, num),dir_path, os.path.join(dir_path,'.gitignore'))
                             except Exception as e:
                                 raise Exception(f'Revert failed due to {e}')
                         else:
