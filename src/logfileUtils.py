@@ -112,11 +112,13 @@ class LogUtils:
         cur = con.cursor()
         sqlite_select_query = """SELECT * from log"""
         cur.execute(sqlite_select_query)
-        row = cur.fetchall()
-        row  = [list(x) for x in row]
-        print(row)
-        for x in row:
-            print(("{:<15}"*len(x)).format(*x))
+        rows = cur.fetchall()
+        rows  = [list(row) for row in rows]
+        print('\n')
+        rows = [['Commit Message','Commit Number','Commit Datetime']] + [[' ',' ',' ']] + rows
+        for row in rows:
+            print(("{:<35}"*len(row)).format(*row))
         con.close()
+        print('\n')
 
 LogUtils.display_log('../test')
