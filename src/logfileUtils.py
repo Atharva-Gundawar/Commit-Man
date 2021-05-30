@@ -113,6 +113,10 @@ class LogUtils:
         sqlite_select_query = """SELECT * from log"""
         cur.execute(sqlite_select_query)
         row = cur.fetchall()
+        row  = [list(x) for x in row]
         print(row)
-        print(("{:<15}"*len(row)).format(*row))
+        for x in row:
+            print(("{:<15}"*len(x)).format(*x))
         con.close()
+
+LogUtils.display_log('../test')
