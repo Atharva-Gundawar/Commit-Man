@@ -103,3 +103,16 @@ class LogUtils:
             except Exception:
                 return False
             return True
+    
+    @staticmethod
+    def display_log(dir_path):
+        cm_dir=os.path.join(dir_path, '.cm')
+        log_path = os.path.join(cm_dir,'log.db')
+        con = sqlite3.connect(log_path)
+        cur = con.cursor()
+        sqlite_select_query = """SELECT * from log"""
+        cur.execute(sqlite_select_query)
+        row = cur.fetchall()
+        print(row)
+        print(("{:<15}"*len(row)).format(*row))
+        con.close()

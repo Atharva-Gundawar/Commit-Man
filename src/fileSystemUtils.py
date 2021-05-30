@@ -42,6 +42,7 @@ class FileUtils:
         @param cm_file_path: Old version of the file
         @param file_path: New version of the file
 
+        @return file diffrence
         """
         # cm_file_path is the path of the file saved inside the .cm folder.
         # file_path is the path of the file in the active directory.
@@ -120,7 +121,7 @@ class FileUtils:
                     shutil.copy2(s, d)
     
     @staticmethod
-    def silentremove(filename):
+    def silentremove(file_path):
         """
         Deletes file if exists .
 
@@ -128,7 +129,7 @@ class FileUtils:
 
         """
         try:
-            os.remove(filename)
+            os.remove(file_path)
         except OSError as e:
             if e.errno != errno.ENOENT:
                 raise 
