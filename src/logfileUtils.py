@@ -12,7 +12,7 @@ class LogUtils:
     msgAndNumCheck => Validates Message and number.
     updateLogfile  => Updates log file with Commit Message and Commit Number.
     genrateLogfile => Genrates and tests Logfile.
-    
+    display_log    => Displays logfile. 
     """
 
     @staticmethod
@@ -106,19 +106,26 @@ class LogUtils:
     
     @staticmethod
     def display_log(dir_path):
-        cm_dir=os.path.join(dir_path, '.cm')
-        log_path = os.path.join(cm_dir,'log.db')
-        con = sqlite3.connect(log_path)
-        cur = con.cursor()
-        sqlite_select_query = """SELECT * from log"""
-        cur.execute(sqlite_select_query)
-        rows = cur.fetchall()
-        rows  = [list(row) for row in rows]
-        print('\n')
-        rows = [['Commit Message','Commit Number','Commit Datetime']] + [[' ',' ',' ']] + rows
-        for row in rows:
-            print(("{:<35}"*len(row)).format(*row))
-        con.close()
-        print('\n')
+        """
+        Prints contents of the log file.
+        
+        @param dir_path : Path to the target directory. 
 
-LogUtils.display_log('../test')
+        """
+        try:
+            cm_dir=os.path.join(dir_path, '.cm')
+            log_path = os.path.join(cm_dir,'log.db')
+            con = sqlite3.connect(log_path)
+            cur = con.cursor()
+            sqlite_select_query = """SELECT * from log"""
+            cur.execute(sqlite_select_query)
+            rows = cur.fetchall()
+            rows  = [list(row) for row in rows]
+            print('\n')
+            rows = [['Commit Message','Commit Number','Commit Datetime']] + [[' ',' ',' ']] + rows
+            for row in rows:
+                print(("{:<35}"*len(row)).format(*row))
+            con.close()
+            print('\n')
+        except:
+            raise
