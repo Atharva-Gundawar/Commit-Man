@@ -41,6 +41,7 @@ class GetArgumentParser:
                     main.py reinit
                     main.py revert <number> [-f | --force]
                     main.py man
+                    main.py showlog
                     main.py (-h | --help)
                     main.py --version
                 Options:

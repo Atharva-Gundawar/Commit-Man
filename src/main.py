@@ -1,6 +1,7 @@
 import os
 from argparser import GetArgumentParser
 from cmManager import CommitMan
+from logfileUtils import LogUtils
 import manPages 
 import sys
 def main():
@@ -21,6 +22,8 @@ def main():
         CommitMan.revert(arguments['<number>'],cur_dir,arguments['--force'])
     elif arguments['reinit']:
         CommitMan.reinit(cur_dir)
+    elif arguments['showlog']:
+        LogUtils.display_log(cur_dir)
     elif arguments['man']:
         print("\n")
         print("#"*60)
@@ -29,7 +32,7 @@ def main():
             print(f'\n{command}:\n{manPages.commands[command]}')
             print('-'*60)
         print("#"*60,"\n")
-            
+
     else:
         print(argparse.doc)
 
