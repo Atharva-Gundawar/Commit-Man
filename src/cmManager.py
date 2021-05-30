@@ -1,11 +1,11 @@
-import os
-import sys
-import shutil
-import sqlite3
-import subprocess
+from src.fileSystemUtils import FileUtils
+from src.logfileUtils import LogUtils
 
-from logfileUtils import LogUtils
-from fileSystemUtils import FileUtils
+import subprocess
+import sqlite3
+import shutil
+import sys
+import os
 
 """
 Folder structure:

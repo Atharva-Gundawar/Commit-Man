@@ -1,9 +1,10 @@
-import os
-from argparser import GetArgumentParser
-from cmManager import CommitMan
-from logfileUtils import LogUtils
-import manPages 
+from src.argparser import GetArgumentParser
+from src.logfileUtils import LogUtils
+from src.cmManager import CommitMan
+import src.manPages 
 import sys
+import os
+
 def main():
     """
     Main function which handles argumenst passed,
@@ -13,7 +14,6 @@ def main():
     argparse = GetArgumentParser()
     arguments = argparse.getArguments()
     cur_dir = os.path.abspath(os.path.curdir)
-    cur_dir = '../test'
     if arguments['init']:
         CommitMan.init(cur_dir)
     elif arguments['commit']:

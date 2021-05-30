@@ -1,9 +1,9 @@
 from gitignore_parser import parse_gitignore
 import filecmp
-import os
-import shutil
 import difflib
+import shutil
 import errno
+import os
 class FileUtils:
     """
     FileUtils class contains all the functions
