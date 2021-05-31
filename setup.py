@@ -14,7 +14,7 @@ URL = 'https://github.com/atharva-Gundawar/commit-man'
 EMAIL = 'atharva.n.gundawar@gmail.com'
 AUTHOR = 'Atharva Gundawar'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 
 REQUIRED = [
     "datetime", "gitignore_parser", "docopt"
