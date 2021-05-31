@@ -104,7 +104,7 @@ cm man
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://github.com/atharva-Gundawar/commit-man) for details on our code of conduct, and the process for submitting pull requests.
+Please read [CONTRIBUTING](https://github.com/Atharva-Gundawar/Commit-Man/blob/main/PROJECTINFO.md#contributing) for details on our code of conduct, and the process for submitting pull requests.
 
 ## Authors
 

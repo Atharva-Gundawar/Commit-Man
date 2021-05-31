@@ -6,27 +6,26 @@
 ## File Structure
 
 ```markdown
-  ├── .gitignore                <- DSC
-  ├── LICENSE                   <- DSC
-  ├── Pipfile                   <- DSC
-  ├── PROJECTINFO.md            <- DSC
-  ├── README.md                 <- DSC
-  ├── requirements.txt          <- DSC
-  └── src                       <- DSC
-      ├── argparser.py          <- DSC
-      ├── cmManager.py          <- DSC
-      ├── fileSystemUtils.py    <- DSC
-      ├── logfileUtils.py       <- DSC
-      ├── main.py               <- DSC
-      ├── manPages.py           <- DSC
-      ├── temp.py               <- DSC
-      └── __init__.py           <- DSC
+  ├── .gitignore                <- Gitignore file
+  ├── LICENSE                   <- MIT LICENSE
+  ├── Pipfile                   <- Pipfile
+  ├── PROJECTINFO.md            <- PROJECTINFO 
+  ├── README.md                 <- README
+  ├── requirements.txt          <- requirements
+  ├── setup.py                  <- setup for pypi
+  └── src                       <- Source folder
+      ├── argparser.py          <- Handles arguments
+      ├── cmManager.py          <- Contains main cm functions
+      ├── fileSystemUtils.py    <- Hnadles file operations
+      ├── logfileUtils.py       <- Handles Log operations
+      ├── main.py               <- Main file 
+      └── __init__.py           <- __init__.py
 
 ```
 
 ## Contributing
 
-1. Fork it (<https://github.com/yourname/yourproject/fork>)
+1. Fork it (<https://github.com/atharva-Gundawar/commit-man>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
