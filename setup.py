@@ -9,12 +9,12 @@ from setuptools import find_packages, setup, Command
 
 # Package meta-data.
 NAME = 'Commit-Man'
-DESCRIPTION = 'Python module to generate requirements.txt for a given project.'
+DESCRIPTION = 'Official Commit man python package'
 URL = 'https://github.com/atharva-Gundawar/commit-man'
 EMAIL = 'atharva.n.gundawar@gmail.com'
 AUTHOR = 'Atharva Gundawar'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '0.0.2'
+VERSION = '0.0.3'
 
 REQUIRED = [
     "datetime", "gitignore_parser", "docopt"
