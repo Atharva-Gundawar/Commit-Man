@@ -7,14 +7,14 @@ name = "pypi"
 
 [requires]
 
-python_version = "3.6"
+python_version = "3.5"
 
 
 [packages]
 
-"psycopg2-binary" = "*"
-django-heroku = "*"
-gunicorn = "*"
+datetime==4.3
+gitignore_parser==0.0.8
+docopt==0.6.2
 
 
 [dev-packages]
