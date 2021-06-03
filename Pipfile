@@ -12,9 +12,9 @@ python_version = "3.5"
 
 [packages]
 
-datetime==4.3
-gitignore_parser==0.0.8
-docopt==0.6.2
+datetime = "*"
+gitignore_parser = "*"
+docopt = "*"
 
 
 [dev-packages]
